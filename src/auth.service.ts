@@ -8,6 +8,6 @@ export class AuthService {
   async validateUser(token: string): Promise<any> {
     // Validate if token passed along with HTTP request
     // is associated with any registered account in the database
-    return await this.usersService.findOneByToken(token);
+    // return await this.usersService.findOneByToken(token);
   }
 }

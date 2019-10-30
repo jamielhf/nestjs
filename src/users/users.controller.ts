@@ -7,8 +7,10 @@ export class UserController {
   constructor(private readonly userService: UsersService) {}
 
   @Get(':id')
-  getHello(@Param() params): string {
+  async getHello(@Param() params): Promise<string> {
     console.log(params.id);
+    const data = await this.userService.findAll();
+    console.log(data);
     return `hello${params.id}`
   }
 }
