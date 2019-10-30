@@ -34,6 +34,8 @@ $ npm run test:cov
 
 ## 论坛后台 模仿简书
 
+nestjs+mysql
+
 ## 开发的功能
 
 - 登陆和注册 登出功能 ❎
