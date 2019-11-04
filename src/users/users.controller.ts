@@ -1,16 +1,17 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Res,HttpStatus,UseGuards} from '@nestjs/common';
 import { UsersService } from './users.service';
-import {request} from 'express';
+import { Response } from 'express';
+import {AuthGuard} from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UsersService) {}
 
   @Get(':id')
-  async getHello(@Param() params): Promise<string> {
+  @UseGuards(AuthGuard())
+  async getHello(@Param() params,@Res() res: Response) {
     console.log(params.id);
     const data = await this.userService.findAll();
-    console.log(data);
-    return `hello${params.id}`
+    res.status(HttpStatus.OK).json(data);
   }
 }

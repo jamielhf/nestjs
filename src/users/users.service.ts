@@ -15,7 +15,7 @@ export class UsersService {
   async findAll(): Promise<Users[]> {
     return await this.usersRepository.find();
   }
-  findOneByToken() {
-
+  findOneByToken(token: string) {
+    console.log(token);
   }
 }
