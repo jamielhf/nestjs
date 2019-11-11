@@ -3,5 +3,5 @@
  * jwt的密匙
  */
 export const jwtConstants = {
-  secret: 'secretKey',
+  secret: '1AGy4bCUoECDZ4yI6h8DxHDwgj84EqStMNyab8nPChQ=',
 };

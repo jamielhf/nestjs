@@ -6,16 +6,12 @@ import { AuthService } from './auth/auth.service';
 export class AppController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local'))
-  @Get('auth/login')
-  async login(@Request() req,@Query() query,) {
-    console.log(query);
-    return this.authService.login(query);
-  }
+  
 
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
   getProfile(@Request() req) {
+    console.log(req.user)
     return req.user;
   }
   @Get('index')

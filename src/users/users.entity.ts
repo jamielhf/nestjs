@@ -5,10 +5,13 @@ export class Users {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 500 })
-  name: string;
+  @Column({ length: 50 })
+  username: string;
 
-  @Column({length:500})
+  @Column({ length: 100 })
+  nick_name: string;
+
+  @Column({length:200})
   decs: string;
 
   @Column('int')
@@ -22,4 +25,7 @@ export class Users {
 
   @Column({length:50})
   type: string
+
+  @Column({length:50})
+  password: string
 }
