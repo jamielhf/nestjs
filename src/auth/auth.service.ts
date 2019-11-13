@@ -30,29 +30,33 @@ export class AuthService {
   async login(data: LoginDto) {
     const {username,password} = data;
     if(!username || ! password) {
-      throw new HttpException({
-        status: HttpStatus.FORBIDDEN,
-        msg: '用户名或密码为空！',
-      }, 403);
+      return {
+        code: 200,
+        message: '用户名或密码为空！',
+      };
     }
     const user = await this.usersService.findOne(username);
     
     if(!user) {
-      throw new HttpException({
-        status: HttpStatus.FORBIDDEN,
-        msg: '不存在用户',
-      }, 403);
+      return {
+        code: 200,
+        message: '不存在用户',
+      };
     }
     if(password !== user.password) {
-      throw new HttpException({
-        status: HttpStatus.FORBIDDEN,
-        msg: '密码有误',
-      }, 403);
+      return {
+        code: 200,
+        message: '密码有误',
+      };
     }
     delete user.password;
     return {
-      ...user,
-      token: this.jwtService.sign(data),
+      code: 200,
+      data:{
+        ...user,
+        token: this.jwtService.sign(data),
+      },
+      message: '',
     };
   }
 }
