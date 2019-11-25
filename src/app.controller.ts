@@ -1,6 +1,6 @@
 import { Controller, Get,Render, Param,Request, Post, UseGuards, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './feature/auth/auth.service';
 
 @Controller()
 export class AppController {
