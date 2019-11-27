@@ -4,20 +4,30 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { FeatureModule } from './feature/feature.module';
 import { CoreModule } from './core/core.module';
+import { ConfigModule } from './core/config/config.module';
+import { ConfigService } from './core/config/config.service';
+
 
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'Jdfwe34sdF',
-      database: 'js_db',
-      entities:  [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService) => {
+        return {
+          type: 'mysql',
+          host: configService.getString('DATABASE_HOST'),
+          port: configService.getString('DATABASE_PORT'),
+          username: configService.getString('DATABASE_USERNAME'),
+          password: configService.getString('DATABASE_PASSWORD'),
+          database: configService.getString('DATABASE_DATABASE'),
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          synchronize: true,
+        };
+      },
+      inject: [ConfigService],
     }),
+    
     FeatureModule,
     CoreModule,
   ],

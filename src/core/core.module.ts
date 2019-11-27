@@ -5,8 +5,6 @@ import { ConfigModule } from './config/config.module';
   imports:[
     ConfigModule
   ],
-  exports:[
-    ConfigModule
-  ]
+  exports:[ConfigModule]
 })
 export class CoreModule {}

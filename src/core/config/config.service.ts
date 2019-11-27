@@ -26,7 +26,7 @@ export class ConfigService {
       API_AUTH_ENABLED: Joi.boolean().required(),
       DATABASE_TYPE: Joi.string().required(),
       DATABASE_HOST: Joi.string().required(),
-      DATABASE_PORT: Joi.number().required(),
+      DATABASE_PORT: Joi.string().required(),
       DATABASE_USERNAME: Joi.string().required(),
       DATABASE_PASSWORD: Joi.string().required(),
       DATABASE_DATABASE: Joi.string().required(),
@@ -42,5 +42,8 @@ export class ConfigService {
   }
   get isApiAuthEnabled(): boolean {
     return Boolean(this.envConfig.API_AUTH_ENABLED);
+  }
+  getString(key:string):string {
+    return this.envConfig[key]
   }
 }
