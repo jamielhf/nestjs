@@ -10,15 +10,17 @@ export class UserController {
     private readonly authService: AuthService
   ) {}
 
-  // @Get(':id')
-  // @UseGuards(AuthGuard())
-  // async getHello(@Param() params,@Res() res: Response) {
-  //   console.log(params.id);
-  //   const data = await this.userService.findAll();
-  //   res.status(HttpStatus.OK).json(data);
-  // }
+  @Get('findAll')
+  async getHello() {
+    const data = await this.userService.findAll();
+    console.log(data);
+   return {
+     a:2,
+     data,
+   }
+  }
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Get('info')
   getProfile(@Request() req) {
     return req.user;
