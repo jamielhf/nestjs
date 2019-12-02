@@ -1,5 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 @Entity()
 export class Users {
   @PrimaryGeneratedColumn()
@@ -9,16 +8,16 @@ export class Users {
   username: string;
 
   @Column({ length: 100 })
-  nick_name: string;
+  nickName: string;
 
   @Column({length:200})
   decs: string;
 
   @Column('int')
-  fans_num: number;
+  fansNum: number;
 
   @Column('int')
-  focus_num: number;
+  focusNum: number;
 
   @Column('text')
   avatar: string
@@ -28,4 +27,22 @@ export class Users {
 
   @Column({length:50})
   password: string
+
+  @Column({length:50})
+  email:string
+
+  @Column({length:50})
+  githubId:string
+
+  @Column({length:50})
+  githubUsername:string
+
+  @Column({length:50})
+  githubAccessToken:string
+
+  @CreateDateColumn({})
+  createTime:Date
+
+  @UpdateDateColumn({})
+  updateTime:Date
 }

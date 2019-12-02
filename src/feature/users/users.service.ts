@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './users.entity';
-import { BaseService } from '../../commom/base.service';
-
+import { BaseService } from '../../common/base.service';
 @Injectable()
 export class UsersService extends BaseService {
   constructor(

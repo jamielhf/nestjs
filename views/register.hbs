@@ -17,9 +17,12 @@
       url:'http://localhost:3000/auth/register',
       type:'post',
       dataType:'json',
-       // headers: {
-        //  'CSRF-Token': token // <-- is the csrf token as a header
-       // },
+      data:{
+        username:123
+      },
+        headers: {
+          'CSRF-Token': token // <-- is the csrf token as a header
+        },
     }).done((res) => {
       console.log(res);
     }).fail((res) => {
