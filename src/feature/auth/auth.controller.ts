@@ -11,4 +11,19 @@ export class AuthController {
     return this.authService.login(query);
   }
   
+  @Get('register')
+  @Render('register')
+  async renderRegister(@Request() req) {
+    return {
+      csrf :req.csrfToken()
+    }
+  }
+  
+  @Post('register')
+  async register() {
+    return {
+      a:1
+    }
+    // return this.authService.register()
+  }
 }

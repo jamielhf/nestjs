@@ -59,4 +59,8 @@ export class AuthService {
       message: '',
     };
   }
+
+  async register() {
+    
+  }
 }

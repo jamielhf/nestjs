@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>App</title>
+    <meta name="csrf-token" content="{{csrf}}">
+  </head>
+  <body>
+    {{ message }}
+    邮箱<input type="text">
+    密码<input type="password">
+      <input type='hidden' name='_csrf' value='{{csrf}}' />
+     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+     <script>
+       var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        $.ajax({
+      url:'http://localhost:3000/auth/register',
+      type:'post',
+      dataType:'json',
+       // headers: {
+        //  'CSRF-Token': token // <-- is the csrf token as a header
+       // },
+    }).done((res) => {
+      console.log(res);
+    }).fail((res) => {
+      console.log(res);
+    })
+   
+     </script>
+  </body>
+</html>
