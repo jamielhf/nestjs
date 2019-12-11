@@ -6,11 +6,12 @@ import { AppModule } from './app.module';
 import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser'
 import { ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from './core/http-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
   );
-
+  app.useGlobalFilters(new HttpExceptionFilter());
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
 
