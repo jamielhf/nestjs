@@ -2,6 +2,7 @@
 import { Controller, Get,Render, Param,Request, Post, UseGuards, Query, Body, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, ResgisterDto } from './dto/auth.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -21,12 +22,7 @@ export class AuthController {
   }
   
   @Post('register')
-  async register(@Body() body) {
-    console.log(body);
-    throw new BadRequestException('fail');
-    return {
-      body
-    }
-    // return this.authService.register()
+  async register(@Body() body:ResgisterDto) {
+     let data = await this.authService.register(body);
   }
 }

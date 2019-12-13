@@ -1,3 +1,4 @@
+
 import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
@@ -66,6 +67,6 @@ export class AuthService {
    * @memberof AuthService
    */
   async register(data:ResgisterDto) {
-    
+    console.log(data);
   }
 }
