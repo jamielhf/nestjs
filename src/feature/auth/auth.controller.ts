@@ -15,12 +15,21 @@ export class AuthController {
   
   @Get('register')
   @Render('register')
-  async renderRegister(@Request() req) {
+  async renderRegister(@Request() req,@Query() query) {
+    console.log(query);
     return {
       csrf :req.csrfToken()
     }
   }
   
+ 
+  @Get('test')
+  @Render('test')
+  async test(@Request() req,@Query() query) {
+    console.log(query);
+  }
+  
+
   @Post('register')
   async register(@Body() body:ResgisterDto) {
      let data = await this.authService.register(body);

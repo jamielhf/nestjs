@@ -25,11 +25,12 @@ async function bootstrap() {
   }));
   // 使用前端渲染引擎
   app.setViewEngine('hbs');
-  // jwt
+  // csrf
   app.use(cookieParser())
   app.use(csurf({ cookie: true }));
-  // 全局异常捕获
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  // 全局异常捕获
   await app.listen(3000);
 }
 bootstrap();
