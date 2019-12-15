@@ -21,7 +21,10 @@
      'CSRF-Token': token // <-- is the csrf token as a header
     },
       data:{
-        _csrf: token,
+        username: 'jamie1',
+        password:'123456',
+        repwd:'123456',
+        email:'123@11.com',
       },
     }).done((res) => {
       console.log(res);

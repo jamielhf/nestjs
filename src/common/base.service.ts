@@ -12,4 +12,7 @@ export abstract class BaseService {
   async findOne(query): Promise<any> {
     return await this.repository.findOne(query);
   }
+  async find(query): Promise<any> {
+    return await this.repository.find(query);
+  }
 }

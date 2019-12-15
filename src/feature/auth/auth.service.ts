@@ -68,5 +68,14 @@ export class AuthService {
    */
   async register(data:ResgisterDto) {
     console.log(data);
+    const { username, email } = data;
+    let exitUsername = await this.usersService.findOne({username:123});
+    console.log(exitUsername);
+    if(exitUsername) {
+      return {
+        code : 10002,
+        msg:'用户名已存在'
+      }
+    }
   }
 }

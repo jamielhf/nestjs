@@ -28,9 +28,20 @@ async function bootstrap() {
   // csrf
   app.use(cookieParser())
   app.use(csurf({ cookie: true }));
-  app.useGlobalFilters(new HttpExceptionFilter());
+
+  app.use((err, req, res, next) => {
+    if (err.code !== 'EBADCSRFTOKEN') return next(err)
+    // handle CSRF token errors here
+    res.status(403)
+    res.json({
+      code : 403,
+      msg:'invalid csrf token'
+    })
+  })
 
   // 全局异常捕获
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   await app.listen(3000);
 }
 bootstrap();

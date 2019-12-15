@@ -10,7 +10,7 @@ export class ResgisterDto {
   @IsNotEmpty({
     message: '用户名不能为空',
   })
-  @Matches(/^[a-zA-Z0-9\-_]{5, 20}$/i, {
+  @Matches(/^[a-zA-Z0-9\-_]{5,20}$/i, {
     message: '用户名不合法',
   })
   readonly username: string;
@@ -24,7 +24,7 @@ export class ResgisterDto {
   @IsEqualsThan('password', {
     message: '两次密码输入不一致。',
   })
-  readonly rePwd: string;
+  readonly repwd: string;
   @IsNotEmpty({
     message: '邮箱不能为空',
   })

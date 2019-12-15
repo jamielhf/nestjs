@@ -32,6 +32,6 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body:ResgisterDto) {
-     let data = await this.authService.register(body);
+     return await this.authService.register(body);
   }
 }
