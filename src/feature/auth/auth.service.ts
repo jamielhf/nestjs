@@ -3,6 +3,10 @@ import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@n
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, ResgisterDto } from './dto/auth.dto';
+import { ApiException } from '../../common/exceptions/api.exception';
+import { ApiErrorCode } from '../../common/enums/api-error-code.enum';
+import { Users } from '../users/users.entity';
+import { UsersModule } from '../users/users.module';
 
 @Injectable()
 export class AuthService {
@@ -67,15 +71,29 @@ export class AuthService {
    * @memberof AuthService
    */
   async register(data:ResgisterDto) {
-    console.log(data);
     const { username, email } = data;
-    let exitUsername = await this.usersService.findOne({username:123});
-    console.log(exitUsername);
+    let exitUsername = await this.usersService.findOne({username});
     if(exitUsername) {
-      return {
-        code : 10002,
-        msg:'用户名已存在'
+      throw new ApiException('用户名已存在',ApiErrorCode.USERNAME_INVALID);
+    } else {
+      let exitEmail = await this.usersService.findOne({email});
+      if(exitEmail) {
+        throw new ApiException('邮箱已存在',ApiErrorCode.EMAIL_INVALID);
       }
     }
+    let user =  {
+      nickName:data.username,
+      decs:'',
+      fansNum:0,
+      type:'user',
+      focusNum:0,
+      avatar:'',
+      githubAccessToken:'',
+      githubId:'',
+      githubUsername:'',
+      ...data,
+    }
+    let res = await this.usersService.save(user);
+    console.log(res);
   }
 }

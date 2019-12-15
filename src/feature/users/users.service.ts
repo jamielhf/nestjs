@@ -18,7 +18,4 @@ export class UsersService extends BaseService {
   // async findAll(): Promise<Users[]> {
   //   return await this.usersRepository.find();
   // }
-  async findOne(query): Promise<Users> {
-    return await this.usersRepository.findOne(query);
-  }
 }

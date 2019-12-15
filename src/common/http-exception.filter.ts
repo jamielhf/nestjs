@@ -1,5 +1,6 @@
 import { ExceptionFilter, Catch, ArgumentsHost,BadRequestException, HttpException,HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { ApiException } from './exceptions/api.exception';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -32,7 +33,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
           code: status,
           msg,
         });
-     } else {
+     }  else if (exception instanceof ApiException) {
+      response
+        .status(200)
+        .json({
+          code: exception.getErrorCode(),
+          msg: exception.getErrorMessage(),
+        });
+    } else {
       response
       .status(200)
       .json({

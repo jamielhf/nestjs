@@ -6,13 +6,37 @@ import { Repository } from 'typeorm';
 export abstract class BaseService {
   constructor() {}
   repository;
+  /**
+   * 查找全部
+   *
+   * @returns {Promise<any>}
+   * @memberof BaseService
+   */
   async findAll(): Promise<any> {
     return await this.repository.find();
   }
+  /**
+   *
+   * 条件查找返回一个数据
+   * @param {*} query
+   * @returns {Promise<any>}
+   * @memberof BaseService
+   */
   async findOne(query): Promise<any> {
     return await this.repository.findOne(query);
   }
+  /**
+   *
+   * 条件查找 返回多个
+   * @param {*} query
+   * @returns {Promise<any>}
+   * @memberof BaseService
+   */
   async find(query): Promise<any> {
     return await this.repository.find(query);
+  }
+
+  async save(data):Promise<any> {
+    return await this.repository.save(data);
   }
 }
