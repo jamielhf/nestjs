@@ -1,3 +1,4 @@
+
 import { Module } from '@nestjs/common';
 import { UserController } from './users.controller';
 import { UsersService } from './users.service';
@@ -24,7 +25,6 @@ import { AuthService } from '../auth/auth.service';
     AuthService
   ],
   exports:[
-    PassportModule,
     UsersService,
 
   ]

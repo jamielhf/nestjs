@@ -9,16 +9,16 @@ export class Users {
   username: string;
 
   @Column({ length: 100,default:'' })
-  nickName: string;
+  nick_name: string;
 
   @Column({length:200,default:''})
   decs: string;
 
   @Column({type:'int',default:0})
-  fansNum: number;
+  fans_num: number;
 
   @Column({type:'int',default:0})
-  focusNum: number;
+  focus_num: number;
 
   @Column({length:1000,default:'https://huyaimg.msstatic.com/avatar/1076/7e/e1d48955f39a25fb944f4dedb3ed16_180_135.jpg'})
   avatar: string
@@ -33,17 +33,17 @@ export class Users {
   email:string
 
   @Column({length:50,default:''})
-  githubId:string
+  github_id:string
 
   @Column({length:50,default:''})
-  githubUsername:string
+  github_username:string
 
   @Column({length:50,default:''})
-  githubAccessToken:string
+  github_accesstoken:string
 
   @CreateDateColumn({})
-  createTime:Date
+  create_time:Date
 
   @UpdateDateColumn({})
-  updateTime:Date
+  update_time:Date
 }

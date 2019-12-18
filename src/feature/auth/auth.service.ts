@@ -1,20 +1,10 @@
-/*
- * @Author: your name
- * @Date: 2019-12-02 15:03:49
- * @LastEditTime: 2019-12-17 18:26:07
- * @LastEditors: your name
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\feature\auth\auth.service.ts
- */
-
 import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, ResgisterDto } from './dto/auth.dto';
-import { ApiException } from '../../common/exceptions/api.exception';
-import { ApiErrorCode } from '../../common/enums/api-error-code.enum';
-import { Users } from '../users/users.entity';
-import { UsersModule } from '../users/users.module';
+import { ApiException } from '../../core/exceptions/api.exception';
+import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
+import {md5} from '../../common/util';
 
 @Injectable()
 export class AuthService {
@@ -90,11 +80,17 @@ export class AuthService {
       }
     }
     let user =  {
-      nickName:data.username,
-      type:'user',
       ...data,
+      nick_name:data.username,
+      password: md5(data.password),
+      type:'user',
     }
     let res = await this.usersService.save(user);
-    console.log(res);
+    if(res) {
+      return {
+        code : 200,
+        msg: 'success'
+      }
+    }
   }
 }

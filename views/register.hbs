@@ -9,6 +9,7 @@
     {{ message }}
     邮箱<input type="text">
     密码<input type="password">
+    <button>登录</button>  
      <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
      <script>
        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -21,10 +22,10 @@
      'CSRF-Token': token // <-- is the csrf token as a header
     },
       data:{
-        username: 'jamie1',
+        username: 'jamie4',
         password:'123456',
         repwd:'123456',
-        email:'123@11.com',
+        email:'144@11.com',
       },
     }).done((res) => {
       console.log(res);
