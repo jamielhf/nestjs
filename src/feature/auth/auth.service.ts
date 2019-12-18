@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2019-12-02 15:03:49
+ * @LastEditTime: 2019-12-17 18:26:07
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \nestjs\src\feature\auth\auth.service.ts
+ */
 
 import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
@@ -83,14 +91,7 @@ export class AuthService {
     }
     let user =  {
       nickName:data.username,
-      decs:'',
-      fansNum:0,
       type:'user',
-      focusNum:0,
-      avatar:'',
-      githubAccessToken:'',
-      githubId:'',
-      githubUsername:'',
       ...data,
     }
     let res = await this.usersService.save(user);
