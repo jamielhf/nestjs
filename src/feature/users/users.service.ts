@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './users.entity';
-import { BaseService } from '../../common/base.service';
+import { BaseService } from '../../common/mysql/base.service';
 @Injectable()
 export class UsersService extends BaseService {
   constructor(
@@ -18,4 +18,11 @@ export class UsersService extends BaseService {
   // async findAll(): Promise<Users[]> {
   //   return await this.usersRepository.find();
   // }
+  create(data) {
+    let user = new Users();
+    user = {
+      ...data,
+    }
+    return this.repository.save(user)
+  }
 }

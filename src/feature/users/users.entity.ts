@@ -20,7 +20,9 @@ export class Users {
   @Column({type:'int',default:0})
   focus_num: number;
 
-  @Column({length:1000,default:'https://huyaimg.msstatic.com/avatar/1076/7e/e1d48955f39a25fb944f4dedb3ed16_180_135.jpg'})
+  @Column({
+   type:'text',
+  })
   avatar: string
 
   @Column({length:50,default:'user'})

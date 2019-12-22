@@ -6,6 +6,6 @@ const crypto = require('crypto');
  * @param string 
  */
 export  const md5 =(string: string | number): string => {
-        const md5 = crypto.createHash('md5');
-        return md5.update(string).digest('hex');
+  const md5 = crypto.createHash('md5');
+  return md5.update(string).digest('hex');
 }

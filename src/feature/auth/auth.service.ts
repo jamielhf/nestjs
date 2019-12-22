@@ -5,12 +5,14 @@ import { LoginDto, ResgisterDto } from './dto/auth.dto';
 import { ApiException } from '../../core/exceptions/api.exception';
 import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
 import {md5} from '../../common/util';
+import { MailService } from '../../common/services/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly mailer:MailService,
   ) {}
 /**
  * 重新验证
@@ -79,18 +81,26 @@ export class AuthService {
         throw new ApiException('邮箱已存在',ApiErrorCode.EMAIL_INVALID);
       }
     }
-    let user =  {
+    let user = {
       ...data,
       nick_name:data.username,
       password: md5(data.password),
+      avatar:'https://huyaimg.msstatic.com/avatar/1076/7e/e1d48955f39a25fb944f4dedb3ed16_180_135.jpg',
       type:'user',
     }
-    let res = await this.usersService.save(user);
-    if(res) {
-      return {
-        code : 200,
-        msg: 'success'
+    try{
+      let res = await this.usersService.save(user);
+      if(res) {
+        // const token = encryptMD5(user.email + user.pass + this.secret);
+        this.mailer.sendActiveMail(user.email,'111',user.username);
+        return {
+          code : 200,
+          msg: 'success'
+        }
       }
+    } catch (e) {
+      throw new ApiException(e,ApiErrorCode.TIMEOUT);
     }
+   
   }
 }

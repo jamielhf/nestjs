@@ -10,7 +10,16 @@ import { DynamicModule, Module, Provider, Global } from '@nestjs/common';
 import { MailerService } from './mailer.service';
 
 @Module({
-  providers: [MailerService]
+  providers: [
+      MailerService,
+      {
+        provide: 'MAIL_OPTION',
+        useValue: {
+            a:13
+        },
+      },
+   ],
+  exports:[MailerService]
 })
 export class MailerModule {
      /**
@@ -21,9 +30,10 @@ export class MailerModule {
         return {
             module: MailerModule,
             providers: [
-                { provide: MAILER_MODULE_OPTIONS, useValue: options },
-                createMailerClient<T>(),
-                MailerService,
+                { 
+                    provide: MailerService, 
+                    useValue: options 
+                },
             ],
             exports: [MailerService],
         };
@@ -33,13 +43,15 @@ export class MailerModule {
      * 异步引导邮箱模块
      * @param options 邮箱模块的选项
      */
-    static forRootAsync<T>(options: MailerModuleAsyncOptions<T>): DynamicModule {
+    static forRootAsync<T>(options): DynamicModule {
         return {
             module: MailerModule,
             imports: options.imports || [],
-            providers: [
-                ...this.createAsyncProviders(options),
-                createMailerClient<T>(),
+            providers: [{
+                provide: 'MAIL_OPTION',
+                useFactory: options.useFactory,
+                inject: options.inject,
+                },
                 MailerService,
             ],
             exports: [MailerService],

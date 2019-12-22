@@ -46,4 +46,20 @@ export class ConfigService {
   getString(key:string):string {
     return this.envConfig[key]
   }
+  /**
+   * 返回多个配置
+   *
+   * @param {[string]} keys
+   * @returns
+   * @memberof ConfigService
+   */
+  getKeys(keys:[string]) {
+    let obj = {};
+    keys.forEach((item)=>{
+      if(this.envConfig[item]) {
+        obj[item] = this.envConfig[item];
+      }
+    });
+    return obj;
+  }
 }
