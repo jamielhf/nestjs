@@ -9,18 +9,7 @@
 import { DynamicModule, Module, Provider, Global } from '@nestjs/common';
 import { MailerService } from './mailer.service';
 
-@Module({
-  providers: [
-      MailerService,
-      {
-        provide: 'MAIL_OPTION',
-        useValue: {
-            a:13
-        },
-      },
-   ],
-  exports:[MailerService]
-})
+@Module({})
 export class MailerModule {
      /**
      * 同步引导邮箱模块

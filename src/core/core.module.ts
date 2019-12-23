@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2019-12-02 15:03:49
+ * @LastEditTime : 2019-12-23 18:26:01
+ * @LastEditors  : Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \nestjs\src\core\core.module.ts
+ */
 import { Module } from '@nestjs/common';
 import { ConfigModule } from './config/config.module';
 import { MailerModule } from './mailer/mailer.module';
@@ -29,8 +37,9 @@ import { MailerService } from './mailer/mailer.service';
     MailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService) => {
-        const mailer = configService.getKeys(['MAIL_HOST','MAIL_PORT','MAIL_USER','MAIL_PASS'])
+        const mailer = configService.getKeys(['MAIL_HOST','MAIL_PORT','MAIL_USER','MAIL_PASS','MAIL_SERVICE'])
         return {
+          service: mailer.MAIL_SERVICE,
           host: mailer.MAIL_HOST,     // 邮箱smtp地址
           port: mailer.MAIL_PORT * 1, // 端口号
           secure: true,

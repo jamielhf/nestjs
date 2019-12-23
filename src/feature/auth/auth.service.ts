@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto, ResgisterDto } from './dto/auth.dto';
 import { ApiException } from '../../core/exceptions/api.exception';
 import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
-import {md5} from '../../common/util';
+import {md5, encryptMD5} from '../../common/util';
 import { MailService } from '../../common/services/mail.service';
 
 @Injectable()
@@ -91,8 +91,8 @@ export class AuthService {
     try{
       let res = await this.usersService.save(user);
       if(res) {
-        // const token = encryptMD5(user.email + user.pass + this.secret);
-        this.mailer.sendActiveMail(user.email,'111',user.username);
+        const token = encryptMD5(user.email + user.password);
+        this.mailer.sendActiveMail('569309786@qq.com',token,user.username);
         return {
           code : 200,
           msg: 'success'
@@ -102,5 +102,9 @@ export class AuthService {
       throw new ApiException(e,ApiErrorCode.TIMEOUT);
     }
    
+  }
+ async testSendEmail(){
+    let d = await this.mailer.sendActiveMail('569309786@qq.com','123','123');
+    return d;
   }
 }

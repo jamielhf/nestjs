@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2019-12-02 15:03:49
+ * @LastEditTime : 2019-12-23 17:38:49
+ * @LastEditors  : Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \nestjs\src\feature\users\users.module.ts
+ */
 
 import { Module } from '@nestjs/common';
 import { UserController } from './users.controller';
@@ -7,9 +15,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from './users.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from '../auth/constants';
-import { AuthService } from '../auth/auth.service';
+import { CommonModule } from '../../common/common.module';
 @Module({
   imports: [
+    CommonModule,
     TypeOrmModule.forFeature([Users]),
     PassportModule, // 默认策略，之后在装饰器中使用就不需要传递
     JwtModule.register({
@@ -22,11 +31,9 @@ import { AuthService } from '../auth/auth.service';
   ],
   providers:[
     UsersService,
-    AuthService,
   ],
   exports:[
     UsersService,
-
   ]
 })
 export class UsersModule {}

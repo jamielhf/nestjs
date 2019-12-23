@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2019-12-02 15:03:49
+ * @LastEditTime: 2019-12-23 18:10:01
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \nestjs\src\feature\auth\auth.controller.ts
+ */
 
 import { Controller, Get,Render, Param,Request, Post, UseGuards, Query, Body, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -26,7 +34,7 @@ export class AuthController {
   @Get('test')
   @Render('test')
   async test(@Request() req,@Query() query) {
-    console.log(query);
+    return await this.authService.testSendEmail();
   }
   
 
