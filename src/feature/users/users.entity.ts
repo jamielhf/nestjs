@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2019-12-02 15:03:49
+ * @LastEditTime : 2019-12-24 16:52:48
+ * @LastEditors  : Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \nestjs\src\feature\users\users.entity.ts
+ */
 
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 @Entity()
@@ -33,6 +41,9 @@ export class Users {
 
   @Column({length:50})
   email:string
+
+  @Column({type:'int',default:0})
+  active: number
 
   @Column({length:50,default:''})
   github_id:string

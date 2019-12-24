@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2019-12-02 15:03:49
- * @LastEditTime: 2019-12-23 18:25:29
- * @LastEditors: your name
+ * @LastEditTime : 2019-12-24 11:21:09
+ * @LastEditors  : Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \nestjs\src\core\config\config.service.ts
  */
@@ -42,7 +42,7 @@ export class ConfigService {
       MAIL_PORT: Joi.string().required(),
       MAIL_USER: Joi.string().required(),
       MAIL_PASS: Joi.string().required(),
-      MAIL_SERVEICE: Joi.string().required(),
+      MAIL_SERVICE: Joi.string().required(),
     });
 
     const { error, value: validatedEnvConfig } = envVarsSchema.validate(

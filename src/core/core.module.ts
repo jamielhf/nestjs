@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2019-12-02 15:03:49
- * @LastEditTime : 2019-12-23 18:26:01
+ * @LastEditTime : 2019-12-24 11:21:17
  * @LastEditors  : Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \nestjs\src\core\core.module.ts

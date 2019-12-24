@@ -7,30 +7,56 @@
   </head>
   <body>
     {{ message }}
-    邮箱<input type="text">
-    密码<input type="password">
-    <button>登录</button>  
+    用户名<input type="text" value="jamie52" id="username"><br/>
+    邮箱<input type="text"  value="5693097@qq.com" id="email"><br/>
+    密码<input type="password" value="123456"  id="password"><br/>
+    token<input type="text" value=""  id="token"><br/>
+    <br/>
+    <button>测试登录</button>  
+     <br/>
+    <button id="reg">注册</button>  
+     <br/>
+     <button id="activeRegister">验证注册token</button>  
      <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
      <script>
        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-    $.ajax({
-      url:'/auth/register',
-      type:'post',
-      dataType:'json',
-      headers: {
-     'CSRF-Token': token // <-- is the csrf token as a header
-    },
-      data:{
-        username: 'jamie51',
-        password:'123456',
-        repwd:'123456',
-        email:'5693097816@qq.com',
-      },
-    }).done((res) => {
-      console.log(res);
-    }).fail((res) => {
-      console.log(res);
+    $('#reg').click(function(){
+        $.ajax({
+              url:'/auth/register',
+              type:'post',
+              dataType:'json',
+              headers: {
+            'CSRF-Token': token // <-- is the csrf token as a header
+            },
+              data:{
+                username: $('#username').val()+ parseInt(Math.random() *100),
+                password:$('#password').val(),
+                repwd:$('#password').val(),
+                email:$('#email').val(),
+              },
+            }).done((res) => {
+              console.log(res);
+            }).fail((res) => {
+              console.log(res);
+            })
+    })
+      $('#activeRegister').click(function(){
+        $.ajax({
+              url:'/auth/activeRegister',
+              type:'post',
+              dataType:'json',
+              headers: {
+            'CSRF-Token': token // <-- is the csrf token as a header
+            },
+              data:{
+                username: $('#username').val(),
+                key: $('#token').val(),
+              },
+            }).done((res) => {
+              console.log(res);
+            }).fail((res) => {
+              console.log(res);
+            })
     })
    
      </script>

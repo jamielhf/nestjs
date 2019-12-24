@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2019-12-18 17:17:34
- * @LastEditTime : 2019-12-23 18:28:02
+ * @LastEditTime : 2019-12-24 11:38:09
  * @LastEditors  : Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \nestjs\src\core\mailer\mailer.service.ts
@@ -29,13 +29,14 @@ export class MailerService {
     return new Promise(async (resolve,reject)=>{
        this.transporter.sendMail(sendMailOption, (error, info) => {
         if (error) {
-          console.log(error);
+          console.log('sendMail error',error);
           reject(error);
-        } 
-        resolve('success');
-        console.log('Message %s sent: %s', info.messageId, info.response);
-        // only needed when using pooled connections
+        } else {
+          console.log('Message %s sent: %s',  info.messageId, info.response);
+          resolve('success');
+        }
         this.transporter.close();
+        // only needed when using pooled connections
       });
     })
     

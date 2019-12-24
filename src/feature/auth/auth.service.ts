@@ -1,11 +1,12 @@
 import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto, ResgisterDto } from './dto/auth.dto';
+import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { ApiException } from '../../core/exceptions/api.exception';
 import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
-import {md5, encryptMD5} from '../../common/util';
+import { md5, encryptMD5, diffEncryptMD5 } from '../../common/util';
 import { MailService } from '../../common/services/mail.service';
+import {SECRET} from  '../../config/app'
 
 @Injectable()
 export class AuthService {
@@ -91,20 +92,56 @@ export class AuthService {
     try{
       let res = await this.usersService.save(user);
       if(res) {
-        const token = encryptMD5(user.email + user.password);
-        this.mailer.sendActiveMail('569309786@qq.com',token,user.username);
-        return {
-          code : 200,
-          msg: 'success'
+        const token = encryptMD5(user.email + user.password + SECRET);
+        // 发送验证邮件
+        let sendState = await this.mailer.sendActiveMail('linhaifeng3@huya.com',token,user.username);
+        if(sendState === 'success') {
+          return {
+            code : 200,
+            msg: 'success'
+          }
+        } else {
+          throw new ApiException('邮件发送失败',ApiErrorCode.TIMEOUT);
         }
+       
       }
     } catch (e) {
       throw new ApiException(e,ApiErrorCode.TIMEOUT);
     }
    
   }
- async testSendEmail(){
-    let d = await this.mailer.sendActiveMail('569309786@qq.com','123','123');
-    return d;
+ /**
+  * 测试发送邮件
+  *  
+  * @returns
+  * @memberof AuthService
+  */
+  async testSendEmail(){
+    return await this.mailer.sendActiveMail('linhaifeng3@huya.com','123','123');
+  }
+
+  async activeRegister(data:ActiveRegisterDto) {
+    const { username, key } = data;
+    
+    let user = await this.usersService.findOne({username});
+    if(!user) {
+      throw new ApiException('用户不存在',ApiErrorCode.USER_NO_EXIT);
+    }
+    let keyCode = user.email + user.password + SECRET;
+    // 对比key是否正确
+    if(!diffEncryptMD5(keyCode, key)) {
+      throw new ApiException('信息有误，帐号无法被激活。',ApiErrorCode.TOEKN_INVALID);
+    }
+    user.active = true;
+    try {
+      await this.usersService.save(user);
+      return {
+        code: 200,
+        msg: '帐号已被激活'
+      }
+    } catch (e) {
+      throw new ApiException(e,ApiErrorCode.TIMEOUT);
+    }
+    
   }
 }

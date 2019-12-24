@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2019-12-23 10:13:58
- * @LastEditTime: 2019-12-23 18:27:25
- * @LastEditors: your name
+ * @LastEditTime : 2019-12-24 11:17:26
+ * @LastEditors  : Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \nestjs\src\common\services\mail.service.ts
  */
@@ -23,7 +23,7 @@ export class MailService {
     this.host = `${this.configService.getString('HOST')}:${this.configService.getString('PORT')}`;
     this.from = `${this.name} <${this.configService.getString('MAIL_USER')}>`;
   }
-  sendActiveMail(to: string, token: string, username: string) {
+ async sendActiveMail(to: string, token: string, username: string) {
     const name = this.name;
     const subject = `${name}帐号激活`;
     const html = `<p>您好：${username}</p>
@@ -31,12 +31,16 @@ export class MailService {
         token:${token}
         <p>若您没有在${name}填写过注册信息，说明有人滥用了您的电子邮箱，请删除此邮件，我们对给您造成的打扰感到抱歉。</p>
         <p>${name} 谨上。</p>`;
-    this.mailer.sendMail({
+    try{
+      return await this.mailer.sendMail({
         from: this.from,
         to,
         subject,
         html,
     });
+    } catch (e) {
+      return e;
+    }
   }
 
 }
