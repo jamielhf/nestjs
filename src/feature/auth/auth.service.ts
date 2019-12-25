@@ -41,15 +41,14 @@ export class AuthService {
         message: '用户名或密码为空！',
       };
     }
-    const user = await this.usersService.findOne(username);
-    
+    const user = await this.usersService.findOne({username});
     if(!user) {
       return {
         code: 200,
         message: '不存在用户',
       };
     }
-    if(password !== user.password) {
+    if(md5(password) !== user.password) {
       return {
         code: 200,
         message: '密码有误',
@@ -59,10 +58,10 @@ export class AuthService {
     return {
       code: 200,
       data:{
-        ...user,
+        username:data.username,
         token: this.jwtService.sign(data),
       },
-      message: '',
+      message: '登录成功',
     };
   }
   /**

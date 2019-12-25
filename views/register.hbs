@@ -12,7 +12,7 @@
     密码<input type="password" value="123456"  id="password"><br/>
     token<input type="text" value=""  id="token"><br/>
     <br/>
-    <button>测试登录</button>  
+    <button id="login">测试登录</button>  
      <br/>
     <button id="reg">注册</button>  
      <br/>
@@ -29,10 +29,28 @@
             'CSRF-Token': token // <-- is the csrf token as a header
             },
               data:{
-                username: $('#username').val()+ parseInt(Math.random() *100),
+                username: $('#username').val(),
                 password:$('#password').val(),
                 repwd:$('#password').val(),
                 email:$('#email').val(),
+              },
+            }).done((res) => {
+              console.log(res);
+            }).fail((res) => {
+              console.log(res);
+            })
+    })
+     $('#login').click(function(){
+        $.ajax({
+              url:'/auth/login',
+              type:'post',
+              dataType:'json',
+              headers: {
+            'CSRF-Token': token // <-- is the csrf token as a header
+            },
+              data:{
+                username: $('#username').val(),
+                password:$('#password').val(),
               },
             }).done((res) => {
               console.log(res);
