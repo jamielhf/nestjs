@@ -9,19 +9,28 @@ export class UserController {
     private readonly userService: UsersService,
   ) {}
 
-  @Get('findAll')
-  async getHello() {
-    const data = await this.userService.findAll();
-    console.log(data);
-   return {
-     a:2,
-     data,
-   }
-  }
 
-  // @UseGuards(AuthGuard('jwt'))
+  /**
+   * 
+   * 获取登录用户的信息
+   * @param {*} req
+   * @returns
+   * @memberof UserController
+   */
+  @UseGuards(AuthGuard('jwt'))
   @Get('info')
-  getProfile(@Request() req) {
-    return req.user;
+  async getInfo(@Request() req) {
+    if(req.user && req.user.username) {
+      const data = await this.userService.findOne({
+        username:req.user.username
+      });
+      delete data.password;
+      console.log('getInfo',data);
+      return {
+        code: 200,
+        data
+      };
+    }
+    
   }
 }
