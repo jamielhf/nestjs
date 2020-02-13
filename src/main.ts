@@ -15,15 +15,13 @@ async function bootstrap() {
       logger: false
     }
   );
-  app.use(connectLogger(getLogger('default'), 
-    {
-      level: 'info',
-      format: ':method :url :status :response-timems :referrer'
-    })
-    );
+  // 全局异常捕获
+  app.useGlobalFilters(new HttpExceptionFilter());
+  
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
-
+  // 使用前端渲染引擎
+  app.setViewEngine('hbs');
   // 注册并配置全局验证管道
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
@@ -32,15 +30,18 @@ async function bootstrap() {
     skipMissingProperties: false,
     forbidUnknownValues: true,
   }));
-  // 使用前端渲染引擎
-  app.setViewEngine('hbs');
+
+  app.use(connectLogger(getLogger('default'), 
+    {
+      level: 'info',
+      format: ':method :url :status :response-timems :referrer'
+    })
+  );
   // csrf
   app.use(cookieParser())
   app.use(csurf({ cookie: true }));
-
-  app.use((err, req, res, next) => {
-    console.log(err);
-    if (err.code !== 'EBADCSRFTOKEN') return next(err)
+  app.use((err,req, res, next) => {
+    if (err.code !== 'EBADCSRFTOKEN') return next(err);
     // handle CSRF token errors here
     res.status(403)
     res.json({
@@ -49,8 +50,7 @@ async function bootstrap() {
     })
   })
 
-  // 全局异常捕获
-  app.useGlobalFilters(new HttpExceptionFilter());
+  
 
   await app.listen(3000);
 }

@@ -6,11 +6,12 @@
  * @Description: In User Settings Edit
  * @FilePath: \nestjs\src\core\core.module.ts
  */
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { ConfigModule } from './config/config.module';
 import { MailerModule } from './mailer/mailer.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from './config/config.service';
+import { LogServive } from '../common/log/log.service';
 
 @Module({
   imports:[
@@ -52,6 +53,9 @@ import { ConfigService } from './config/config.service';
       },
       inject: [ConfigService],
     })
+  ],
+  providers:[
+    LogServive
   ],
   exports:[ConfigModule,MailerModule],
 })

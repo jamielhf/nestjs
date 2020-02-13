@@ -45,7 +45,7 @@ export class LogServive {
   public log(msg){
     this.logger.info(msg);
   }
-  // public err(msg){
-  //   this.logger.error(msg);
-  // }
+  public err(msg){
+    this.logger.error(msg);
+  }
 }

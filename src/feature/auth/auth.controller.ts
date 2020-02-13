@@ -5,6 +5,7 @@ import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { LogServive } from '../../common/log/log.service';
+import { createCipher } from 'crypto';
 
 @Controller('api/auth')
 export class AuthController {
@@ -14,9 +15,15 @@ export class AuthController {
   // 登录
   @Post('login')
   async login(@Body() body,@Next() next, @Res() res) {
-    const result =  await this.authService.login(body);
-    this.logger.log(JSON.stringify(result));
-    res.json(result);
+    console.log(3);
+    try {
+      const result =  await this.authService.login(body);
+      this.logger.log(JSON.stringify(result));
+      res.json(result);
+    } catch (e) {
+      this.logger.err(e);
+    }
+   
   }
   // 注册
   @Post('register')

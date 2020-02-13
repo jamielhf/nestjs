@@ -7,7 +7,6 @@ import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
 import { md5, encryptMD5, diffEncryptMD5 } from '../../common/util';
 import { MailService } from '../../common/services/mail.service';
 import {SECRET} from  '../../config/app'
-import { LogServive } from '../../common/log/log.service';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +14,6 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly mailer:MailService,
-    private readonly logger:LogServive,
   ) {}
 /**
  * 重新验证
