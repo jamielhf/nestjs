@@ -16,6 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { AuthController } from './auth.controller';
 import { CommonModule } from '../../common/common.module';
+import { LogServive } from '../../common/log/log.service';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { CommonModule } from '../../common/common.module';
     }),
   ],
   controllers:[AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy,LogServive
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

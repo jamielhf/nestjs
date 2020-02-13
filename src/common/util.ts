@@ -1,12 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2019-12-18 16:19:00
- * @LastEditTime: 2019-12-23 17:54:28
- * @LastEditors: your name
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\common\util.ts
- */
-
 const crypto = require('crypto');
 import * as utility from 'utility';
 

@@ -1,24 +1,22 @@
-/*
- * @Author: your name
- * @Date: 2019-12-02 15:03:49
- * @LastEditTime : 2019-12-25 18:23:28
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\feature\auth\auth.controller.ts
- */
 
-import { Controller, Get,Render, Param,Request, Post, UseGuards, Query, Body, BadRequestException } from '@nestjs/common';
+import { Controller, Get,Render, Param,Req, Post, Res,UseGuards, Query, Body, BadRequestException, Next, Logger } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
+import { LogServive } from '../../common/log/log.service';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService,
+    private readonly logger: LogServive
+    ) {}
   // 登录
   @Post('login')
-  async login(@Body() body,) {
-    return this.authService.login(body);
+  async login(@Body() body,@Next() next, @Res() res) {
+    const result =  await this.authService.login(body);
+    this.logger.log(JSON.stringify(result));
+    res.json(result);
   }
   // 注册
   @Post('register')
@@ -34,7 +32,7 @@ export class AuthController {
   
   @Get('register')
   @Render('register')
-  async renderRegister(@Request() req,@Query() query) {
+  async renderRegister(@Req() req,@Query() query) {
     console.log(query);
     return {
       csrf :req.csrfToken()
@@ -43,7 +41,7 @@ export class AuthController {
   
   @Get('test')
   // @Render('test')
-  async test(@Request() req,@Query() query) {
+  async test(@Req() req,@Query() query) {
     return await this.authService.testSendEmail();
   }
 }

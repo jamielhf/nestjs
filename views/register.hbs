@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>App</title>
-    <meta name="csrf-token" content="{{csrf}}">
+    <meta name="csrf-token" content="{{csrf}}12">
   </head>
   <body>
     {{ message }}
@@ -23,7 +23,7 @@
        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     $('#reg').click(function(){
         $.ajax({
-              url:'/auth/register',
+              url:'/api/auth/register',
               type:'post',
               dataType:'json',
               headers: {
@@ -43,7 +43,7 @@
     })
      $('#login').click(function(){
         $.ajax({
-              url:'/auth/login',
+              url:'/api/auth/login',
               type:'post',
               dataType:'json',
               headers: {
@@ -55,7 +55,7 @@
               },
             }).done((res) => {
               console.log(res);
-              if(res.code==200) {
+              if(res.code==200 && res.data) {
                 sessionStorage.setItem('token',res.data.token)
               }
             }).fail((res) => {
@@ -64,7 +64,7 @@
     })
       $('#activeRegister').click(function(){
         $.ajax({
-              url:'/auth/activeRegister',
+              url:'/api/auth/activeRegister',
               type:'post',
               dataType:'json',
               headers: {
@@ -82,7 +82,7 @@
     })
      $('#info').click(function(){
         $.ajax({
-              url:'/user/info',
+              url:'/api/user/info',
               type:'get',
               dataType:'json',
               headers: {

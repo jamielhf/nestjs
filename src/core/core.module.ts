@@ -11,7 +11,6 @@ import { ConfigModule } from './config/config.module';
 import { MailerModule } from './mailer/mailer.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from './config/config.service';
-import { MailerService } from './mailer/mailer.service';
 
 @Module({
   imports:[

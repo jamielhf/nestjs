@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, UnauthorizedException, HttpException, HttpStatus,Response } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
@@ -7,6 +7,7 @@ import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
 import { md5, encryptMD5, diffEncryptMD5 } from '../../common/util';
 import { MailService } from '../../common/services/mail.service';
 import {SECRET} from  '../../config/app'
+import { LogServive } from '../../common/log/log.service';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly mailer:MailService,
+    private readonly logger:LogServive,
   ) {}
 /**
  * 重新验证
@@ -35,6 +37,7 @@ export class AuthService {
    */
   async login(data: LoginDto) {
     const {username,password} = data;
+    
     if(!username || ! password) {
       return {
         code: 200,
@@ -55,6 +58,7 @@ export class AuthService {
       };
     }
     delete user.password;
+    
     return {
       code: 200,
       data:{

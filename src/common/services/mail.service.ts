@@ -1,11 +1,4 @@
-/*
- * @Author: your name
- * @Date: 2019-12-23 10:13:58
- * @LastEditTime : 2019-12-24 11:17:26
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\common\services\mail.service.ts
- */
+
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '../../core/mailer/mailer.service';
 import { ConfigService } from '../../core/config/config.service';

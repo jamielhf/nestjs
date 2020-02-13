@@ -7,11 +7,20 @@ import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser'
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './core/exceptions/http-exception.filter';
+import { configure, getLogger,connectLogger } from 'log4js';
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
-    AppModule,
+    AppModule,{
+      logger: false
+    }
   );
-  
+  app.use(connectLogger(getLogger('default'), 
+    {
+      level: 'info',
+      format: ':method :url :status :response-timems :referrer'
+    })
+    );
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
 
@@ -30,6 +39,7 @@ async function bootstrap() {
   app.use(csurf({ cookie: true }));
 
   app.use((err, req, res, next) => {
+    console.log(err);
     if (err.code !== 'EBADCSRFTOKEN') return next(err)
     // handle CSRF token errors here
     res.status(403)
