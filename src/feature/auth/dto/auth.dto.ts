@@ -1,11 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2019-12-02 15:03:49
- * @LastEditTime : 2019-12-25 18:23:18
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\feature\auth\dto\auth.dto.ts
- */
 import { IsString, IsInt,Matches, IsEmail,IsNotEmpty,NotEquals } from 'class-validator';
 import {Transform} from 'class-transformer';
 import { IsEqualsThan } from '../../../core/decorators/validator.decorators';

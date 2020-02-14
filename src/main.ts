@@ -8,6 +8,7 @@ import * as cookieParser from 'cookie-parser'
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './core/exceptions/http-exception.filter';
 import { configure, getLogger,connectLogger } from 'log4js';
+import { LogServive } from './common/log/log.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
@@ -15,8 +16,9 @@ async function bootstrap() {
       logger: false
     }
   );
+  const logger = new LogServive();
   // 全局异常捕获
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
   
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
