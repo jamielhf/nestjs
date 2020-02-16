@@ -13,6 +13,7 @@ export const  logger = function() {
                 return result
             } catch (e) {
                 this.logger.err(e);
+                return null
             }
             
         };

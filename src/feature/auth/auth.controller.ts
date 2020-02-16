@@ -4,49 +4,68 @@ import { AuthService } from './auth.service';
 import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { LogServive } from '../../common/log/log.service';
 import {logger} from '../../core/decorators/logger.decorators'
+
 
 @Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService,
-    private readonly logger: LogServive
-    ) {
-      
-    }
-  // 登录
-  
+    ) { }
+  /**
+   *
+   * 登陆
+   * @param {*} body
+   * @param {*} res
+   * @returns
+   * @memberof AuthController
+   */
   @Post('login')
   @logger()
-  async login(@Body() body,@Res() res) {
+  async login(@Body() body:LoginDto,@Res() res,@Req() req) {
       let result = await this.authService.login(body);
       res.json(result)
       return result;
   }
-  // 注册
+  
+  @Get('logout')
+  async logout(@Req() req) {
+      
+  }
+  /**
+   *
+   * 注册
+   * @param {ResgisterDto} body
+   * @returns
+   * @memberof AuthController
+   */
   @Post('register')
-  async register(@Body() body:ResgisterDto) {
-     return await this.authService.register(body);
+  @logger()
+  async register(@Body() body:ResgisterDto,@Res() res) {
+     const result = await this.authService.register(body);
+     res.json(result)
+    return result;
   }
 
-   // 注册验证邮箱
+  /**
+   * 
+   * 注册验证邮箱
+   * @param {ActiveRegisterDto} body
+   * @returns
+   * @memberof AuthController
+   */
   @Post('activeRegister')
-  async activeRegister(@Body() body:ActiveRegisterDto) {
-    return await this.authService.activeRegister(body);
+  @logger()
+  async activeRegister(@Body() body:ActiveRegisterDto,@Res() res) {
+    const result = await this.authService.activeRegister(body);
+    res.json(result)
+   return result;
   }
-  
+  // 注册页面 测试用
   @Get('register')
   @Render('register')
   async renderRegister(@Req() req,@Query() query) {
-    console.log(query);
     return {
       csrf :req.csrfToken()
     }
-  }
-  
-  @Get('test')
-  // @Render('test')
-  async test(@Req() req,@Query() query) {
-    return await this.authService.testSendEmail();
   }
 }

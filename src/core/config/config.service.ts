@@ -1,11 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2019-12-02 15:03:49
- * @LastEditTime : 2019-12-24 11:21:09
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\core\config\config.service.ts
- */
 import * as dotenv from 'dotenv';
 import * as Joi from '@hapi/joi';
 import * as fs from 'fs';
@@ -43,6 +35,8 @@ export class ConfigService {
       MAIL_USER: Joi.string().required(),
       MAIL_PASS: Joi.string().required(),
       MAIL_SERVICE: Joi.string().required(),
+      REDIS_HOST:Joi.string().required(),
+      REDIS_PORT:Joi.string().required(),
     });
 
     const { error, value: validatedEnvConfig } = envVarsSchema.validate(
@@ -66,7 +60,7 @@ export class ConfigService {
    * @returns
    * @memberof ConfigService
    */
-  getKeys(keys:[string]) {
+  getKeys(keys: string[]) {
     let obj = {};
     keys.forEach((item)=>{
       if(this.envConfig[item]) {

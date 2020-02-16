@@ -10,7 +10,8 @@ import { LogServive } from './log/log.service';
     LogServive
   ],
   exports:[
-    ServicesModule
+    ServicesModule,
+    LogServive
   ]
 })
 export class CommonModule {}

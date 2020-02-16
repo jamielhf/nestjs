@@ -1,11 +1,4 @@
-/*
- * @Author: your name
- * @Date: 2019-12-02 15:03:49
- * @LastEditTime : 2019-12-23 17:38:49
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\feature\users\users.module.ts
- */
+
 
 import { Module } from '@nestjs/common';
 import { UserController } from './users.controller';

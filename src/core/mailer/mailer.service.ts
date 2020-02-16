@@ -1,11 +1,4 @@
-/*
- * @Author: your name
- * @Date: 2019-12-18 17:17:34
- * @LastEditTime : 2019-12-24 11:38:09
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\core\mailer\mailer.service.ts
- */
+
 import { Injectable, Inject } from '@nestjs/common';
 const nodemailer = require("nodemailer");
 import { IOption, ISendMail } from './mailer.interface';

@@ -1,11 +1,4 @@
-/*
- * @Author: your name
- * @Date: 2019-12-18 17:16:01
- * @LastEditTime: 2019-12-18 19:17:16
- * @LastEditors: your name
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\core\mailer\mailer.module.ts
- */
+
 import { DynamicModule, Module, Provider, Global } from '@nestjs/common';
 import { MailerService } from './mailer.service';
 

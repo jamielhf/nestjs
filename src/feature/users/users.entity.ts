@@ -1,13 +1,7 @@
-/*
- * @Author: your name
- * @Date: 2019-12-02 15:03:49
- * @LastEditTime : 2019-12-24 16:52:48
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\feature\users\users.entity.ts
- */
 
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
+
 @Entity()
 export class Users {
   @PrimaryGeneratedColumn()
@@ -36,6 +30,7 @@ export class Users {
   @Column({length:50,default:'user'})
   type: string
 
+  @Exclude()
   @Column({length:50})
   password: string
 
@@ -51,12 +46,15 @@ export class Users {
   @Column({length:50,default:''})
   github_username:string
 
+  @Exclude()
   @Column({length:50,default:''})
   github_accesstoken:string
 
+  @Exclude()
   @CreateDateColumn({})
   create_time:Date
 
+  @Exclude()
   @UpdateDateColumn({})
   update_time:Date
 }

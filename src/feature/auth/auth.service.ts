@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, HttpException, HttpStatus,Response } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus,Response } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
@@ -21,8 +21,8 @@ export class AuthService {
  * @param password 
  */
   async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-    if (user && user.password === password) {
+    const user = await this.usersService.findOne({username});
+    if (user && user.password === md5(password)) {
       const { password, ...result } = user;
       return result;
     }
@@ -33,18 +33,12 @@ export class AuthService {
    * 登陆成功后返回token
    * @param data 
    */
-  async login(data: LoginDto) {
+  async login(data) {
     const {username,password} = data;
     
-    if(!username || ! password) {
-      return {
-        code: 200,
-        message: '用户名或密码为空！',
-      };
-    }
     const user = await this.usersService.findOne({username});
     if(!user) {
-      return {
+      return { 
         code: 200,
         message: '不存在用户',
       };
@@ -55,13 +49,11 @@ export class AuthService {
         message: '密码有误',
       };
     }
-    delete user.password;
-    
+    const payload = { username: user.username, sub: user.id };
     return {
       code: 200,
       data:{
-        username:data.username,
-        token: this.jwtService.sign(data),
+        token: this.jwtService.sign(payload),
       },
       message: '登录成功',
     };

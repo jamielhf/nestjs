@@ -1,17 +1,11 @@
-/*
- * @Author: your name
- * @Date: 2019-12-02 15:03:49
- * @LastEditTime : 2019-12-24 11:21:17
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\core\core.module.ts
- */
+
 import { Module, Logger } from '@nestjs/common';
 import { ConfigModule } from './config/config.module';
 import { MailerModule } from './mailer/mailer.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from './config/config.service';
 import { LogServive } from '../common/log/log.service';
+import { RedisService } from './redis/redis.service';
 
 @Module({
   imports:[
@@ -55,8 +49,18 @@ import { LogServive } from '../common/log/log.service';
     })
   ],
   providers:[
-    LogServive
+    LogServive,{
+      provide: 'RedisService',
+      useFactory: (configService: ConfigService) => {
+        const options: any = configService.getKeys(['REDIS_PORT','REDIS_HOST']);
+        return new RedisService({
+          port: options.REDIS_PORT,
+          host: options.REDIS_HOST,
+        });
+      },
+      inject: [ConfigService],
+    }
   ],
-  exports:[ConfigModule,MailerModule],
+  exports:[ConfigModule,MailerModule,LogServive],
 })
 export class CoreModule {}
