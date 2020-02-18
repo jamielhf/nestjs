@@ -20,6 +20,17 @@ export class RedisService {
       })
     })
   }
+  async del(key:string,) {
+    return new Promise((resolve,reject)=>{
+      this.client.del(key, (err,val) => {
+        if(!err){
+          resolve(val);
+        } else {
+          reject(err);
+        }
+      })
+    })
+  }
   async get(key:string) {
     return new Promise((resolve,reject)=>{
       this.client.get(key, (err,val) => {

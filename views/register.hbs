@@ -97,7 +97,22 @@
               console.log(res);
             })
     })
-   
+     $('#logout').click(function(){
+        $.ajax({
+              url:'/api/auth/logout',
+              type:'get',
+              dataType:'json',
+              headers: {
+              'CSRF-Token': token, // <-- is the csrf token as a header
+               Authorization: `Bearer ${sessionStorage.getItem('token')}`
+              },
+            }).done((res) => {
+              console.log(res);
+            }).fail((res) => {
+              console.log(res);
+            })
+    })
+    
      </script>
   </body>
 </html>

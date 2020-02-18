@@ -9,7 +9,7 @@ import { CoreModule } from '../../core/core.module';
     MailService,
   ],
   exports:[
-    MailService
+    MailService,
   ]
 })
 export class ServicesModule {}

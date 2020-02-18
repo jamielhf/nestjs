@@ -18,3 +18,18 @@ export function encryptMD5(key: string): string {
 export function diffEncryptMD5(source: string, target: string): boolean {
   return encryptMD5(source) === target;
 }
+
+/**
+ *
+ * 默认返回消息
+ * @export
+ * @param {string} [msg='success']
+ * @returns {msg}
+ */
+export function apiMsg(msg: string = 'success') {
+  return {
+    code: 200,
+    msg,
+  }
+}
+

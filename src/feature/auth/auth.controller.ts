@@ -24,14 +24,18 @@ export class AuthController {
   @Post('login')
   @logger()
   async login(@Body() body:LoginDto,@Res() res,@Req() req) {
-      let result = await this.authService.login(body);
-      res.json(result);
-      return result;
+    let result = await this.authService.login(body);
+    res.json(result);
+    return result;
   }
   
+  @UseGuards(AuthGuard('jwt'))
   @Get('logout')
-  async logout(@Req() req) {
-      
+  @logger()
+  async logout(@Res() res,@Req() req) {
+    let result = await this.authService.logout(req);
+    res.json(result);
+    return result;
   }
   /**
    *

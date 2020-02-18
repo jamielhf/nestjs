@@ -18,7 +18,6 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   @Get('info')
   async getInfo(@Request() req) {
-    console.log(req.user)
     if(req.user && req.user.username) {
       const data = await this.userService.findOne({
         username:req.user.username

@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { ApiException } from '../../core/exceptions/api.exception';
 import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
-import { md5, encryptMD5, diffEncryptMD5 } from '../../common/util';
+import { md5, encryptMD5, diffEncryptMD5, apiMsg } from '../../common/util';
 import { MailService } from '../../common/services/mail.service';
 import {SECRET} from  '../../config/app'
 import { RedisService } from '../../core/redis/redis.service';
@@ -61,6 +61,14 @@ export class AuthService {
       },
       message: '登录成功',
     };
+  }
+  async logout(req){
+    if(req.user && req.user.id) {
+      await this.redisService.del(req.user.id);
+      return apiMsg();
+    } else {
+      return apiMsg('没有登陆信息');
+    }
   }
   /**
    * 注册
