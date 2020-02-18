@@ -9,10 +9,26 @@ export class RedisService {
 
     this.client = redis.createClient(port,host);
   }
-  set(key:string,value:string) {
-    return this.client.set(key,value);
+  async set(key:string,value:string,time: number = 3600 *24) {
+    return new Promise((resolve,reject)=>{
+      this.client.set(key,value,'EX',time, (err,val) => {
+        if(!err){
+          resolve(val);
+        } else {
+          reject(err);
+        }
+      })
+    })
   }
-  get(key:string) {
-    return this.client.get(key);
+  async get(key:string) {
+    return new Promise((resolve,reject)=>{
+      this.client.get(key, (err,val) => {
+        if(!err){
+          resolve(val);
+        } else {
+          reject(err);
+        }
+      })
+    })
   }
 }

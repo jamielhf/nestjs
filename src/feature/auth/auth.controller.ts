@@ -5,11 +5,13 @@ import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import {logger} from '../../core/decorators/logger.decorators'
+import { LogServive } from '../../common/log/log.service';
 
 
 @Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService,
+    private readonly logger: LogServive,
     ) { }
   /**
    *
@@ -23,7 +25,7 @@ export class AuthController {
   @logger()
   async login(@Body() body:LoginDto,@Res() res,@Req() req) {
       let result = await this.authService.login(body);
-      res.json(result)
+      res.json(result);
       return result;
   }
   

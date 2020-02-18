@@ -6,7 +6,6 @@ import { CoreModule } from './core/core.module';
 import { CommonModule } from './common/common.module';
 import { LogServive } from './common/log/log.service';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [

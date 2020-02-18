@@ -4,12 +4,16 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { jwtConstants } from './constants';
 import { UsersService } from '../users/users.service';
 import { md5 } from 'utility';
+import { RedisService } from '../../core/redis/redis.service';
 
 
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly usersService: UsersService) {
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly redisService: RedisService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -18,10 +22,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const {username} = payload;
+    const {username,} = payload;
     const user = await this.usersService.findOne({username});
-    console.log(user);
+    
     if (user) {
+      // token是否在redis中
+      const token = await this.redisService.get(user.id);
+      if(!token) {
+        throw new UnauthorizedException();
+      }
       const { password, ...result } = user;
       return result;
     }

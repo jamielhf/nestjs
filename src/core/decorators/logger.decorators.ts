@@ -10,12 +10,11 @@ export const  logger = function() {
             try {
                 const result = await oldValue.apply(this, arguments);
                 this.logger.log(JSON.stringify(result));
-                return result
+                return result;
             } catch (e) {
                 this.logger.err(e);
                 return null
             }
-            
         };
         return descriptor;
     }

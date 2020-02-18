@@ -7,11 +7,13 @@ import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
 import { md5, encryptMD5, diffEncryptMD5 } from '../../common/util';
 import { MailService } from '../../common/services/mail.service';
 import {SECRET} from  '../../config/app'
+import { RedisService } from '../../core/redis/redis.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly redisService: RedisService,
     private readonly jwtService: JwtService,
     private readonly mailer:MailService,
   ) {}
@@ -50,10 +52,12 @@ export class AuthService {
       };
     }
     const payload = { username: user.username, sub: user.id };
+    const token = this.jwtService.sign(payload);
+    await this.redisService.set(user.id,token,100);
     return {
       code: 200,
       data:{
-        token: this.jwtService.sign(payload),
+        token,
       },
       message: '登录成功',
     };

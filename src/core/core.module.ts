@@ -61,6 +61,6 @@ import { RedisService } from './redis/redis.service';
       inject: [ConfigService],
     }
   ],
-  exports:[ConfigModule,MailerModule,LogServive],
+  exports:[ConfigModule,MailerModule,RedisService],
 })
 export class CoreModule {}
