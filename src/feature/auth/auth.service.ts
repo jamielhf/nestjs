@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { ApiException } from '../../core/exceptions/api.exception';
 import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
-import { md5, encryptMD5, diffEncryptMD5, apiMsg } from '../../common/util';
+import { md5, encryptMD5, diffEncryptMD5, apiSuccessMsg } from '../../common/util';
 import { MailService } from '../../common/services/mail.service';
 import {SECRET} from  '../../config/app'
 import { RedisService } from '../../core/redis/redis.service';
@@ -40,34 +40,26 @@ export class AuthService {
     
     const user = await this.usersService.findOne({username});
     if(!user) {
-      return { 
-        code: 200,
-        message: '不存在用户',
-      };
+      throw new ApiException('不存在用户',ApiErrorCode.LOGIN_FAIL);
     }
     if(md5(password) !== user.password) {
-      return {
-        code: 200,
-        message: '密码有误',
-      };
+      throw new ApiException('密码有误',ApiErrorCode.LOGIN_FAIL);
+    } else if(user.active == 0) {
+      throw new ApiException('账号没激活',ApiErrorCode.LOGIN_FAIL);
     }
     const payload = { username: user.username, sub: user.id };
     const token = this.jwtService.sign(payload);
     await this.redisService.set(user.id,token,100);
-    return {
-      code: 200,
-      data:{
+    return apiSuccessMsg({
         token,
-      },
-      message: '登录成功',
-    };
+    })
   }
   async logout(req){
     if(req.user && req.user.id) {
       await this.redisService.del(req.user.id);
-      return apiMsg();
+      return apiSuccessMsg();
     } else {
-      return apiMsg('没有登陆信息');
+      throw new ApiException('没有用户信息',ApiErrorCode.USER_NO_EXIT);
     }
   }
   /**
@@ -115,16 +107,16 @@ export class AuthService {
     }
    
   }
- /**
-  * 测试发送邮件
-  *  
-  * @returns
-  * @memberof AuthService
-  */
-  async testSendEmail(){
-    return await this.mailer.sendActiveMail('linhaifeng3@huya.com','123','123');
-  }
+  async resetPassword() {
 
+  }
+  /**
+   *
+   * 激活账号
+   * @param {ActiveRegisterDto} data
+   * @returns
+   * @memberof AuthService
+   */
   async activeRegister(data:ActiveRegisterDto) {
     const { username, key } = data;
     

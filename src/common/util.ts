@@ -24,11 +24,13 @@ export function diffEncryptMD5(source: string, target: string): boolean {
  * 默认返回消息
  * @export
  * @param {string} [msg='success']
+ * @param {any} data
  * @returns {msg}
  */
-export function apiMsg(msg: string = 'success') {
+export function apiSuccessMsg(data: any = {},msg: string = 'success',) {
   return {
     code: 200,
+    data,
     msg,
   }
 }

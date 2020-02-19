@@ -28,12 +28,28 @@ export class AuthController {
     res.json(result);
     return result;
   }
-  
+
+  /**
+   * 登出
+   *
+   * @param {*} res
+   * @param {*} req
+   * @returns
+   * @memberof AuthController
+   */
   @UseGuards(AuthGuard('jwt'))
   @Get('logout')
   @logger()
   async logout(@Res() res,@Req() req) {
     let result = await this.authService.logout(req);
+    res.json(result);
+    return result;
+  }
+
+  @Post('resetPassword')
+  @logger()
+  async resetPassword(@Res() res,@Req() req) {
+    let result = await this.authService.resetPassword();
     res.json(result);
     return result;
   }

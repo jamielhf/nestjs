@@ -1,11 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2019-12-03 16:37:34
- * @LastEditTime : 2019-12-24 15:50:35
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\core\enums\api-error-code.enum.ts
- */
 
 export enum ApiErrorCode {
     TIMEOUT = -1, // 系统繁忙
@@ -16,5 +8,5 @@ export enum ApiErrorCode {
     EMAIL_INVALID = 10003, // 邮箱无效
     USER_NO_EXIT = 10004, // 用户不存在
     TOEKN_INVALID = 10005, // 验证码无效
-    
+    LOGIN_FAIL = 10006, // 登陆失败
 }

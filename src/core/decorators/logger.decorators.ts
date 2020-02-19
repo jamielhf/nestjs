@@ -7,14 +7,10 @@ export const  logger = function() {
     return (target, name, descriptor) => {
         var oldValue = descriptor.value;
         descriptor.value = async function() {
-            try {
-                const result = await oldValue.apply(this, arguments);
-                this.logger.log(JSON.stringify(result));
-                return result;
-            } catch (e) {
-                this.logger.err(e);
-                return null
-            }
+            const result = await oldValue.apply(this, arguments);
+            this.logger.log(JSON.stringify(result));
+            return result;
+           
         };
         return descriptor;
     }
