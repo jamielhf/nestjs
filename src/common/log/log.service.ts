@@ -35,15 +35,14 @@ configure({
   }
 });
 
-@Global()
 @Injectable()
 export class LogServive {
   private readonly logger: any;
   constructor(){
     this.logger = getLogger('default');
   }
-  public log(msg){
-    this.logger.info(msg);
+  public log(...args){
+    this.logger.info(...args);
   }
   public err(msg){
     this.logger.error(msg);

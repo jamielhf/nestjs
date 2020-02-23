@@ -8,6 +8,7 @@ import { md5, encryptMD5, diffEncryptMD5, apiSuccessMsg } from '../../common/uti
 import { MailService } from '../../common/services/mail.service';
 import {SECRET} from  '../../config/app'
 import { RedisService } from '../../core/redis/redis.service';
+import { LogServive } from '../../common/log/log.service';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
     private readonly redisService: RedisService,
     private readonly jwtService: JwtService,
     private readonly mailer:MailService,
+    private readonly logger: LogServive,
   ) {}
 /**
  * 重新验证
@@ -45,7 +47,9 @@ export class AuthService {
     if(md5(password) !== user.password) {
       throw new ApiException('密码有误',ApiErrorCode.LOGIN_FAIL);
     } else if(user.active == 0) {
-      throw new ApiException('账号没激活',ApiErrorCode.LOGIN_FAIL);
+      // 账号没有激活 重新验证
+      await this.resendEmail(user);
+      throw new ApiException('账号没激活,已重新发送邮件到注册邮箱',ApiErrorCode.LOGIN_FAIL);
     }
     const payload = { username: user.username, sub: user.id };
     const token = this.jwtService.sign(payload);
@@ -89,17 +93,10 @@ export class AuthService {
     try{
       let res = await this.usersService.save(user);
       if(res) {
-        const token = encryptMD5(user.email + user.password + SECRET);
-        // 发送验证邮件
-        let sendState = await this.mailer.sendActiveMail('linhaifeng3@huya.com',token,user.username);
-        if(sendState === 'success') {
-          return {
-            code : 200,
-            msg: 'success'
-          }
-        } else {
-          throw new ApiException('邮件发送失败',ApiErrorCode.TIMEOUT);
-        }
+       const r =  await this.resendEmail(user);
+       if(r) {
+         return apiSuccessMsg({},'注册成功，已经发送验证邮件');
+       }
        
       }
     } catch (e) {
@@ -109,6 +106,20 @@ export class AuthService {
   }
   async resetPassword() {
 
+  }
+  async resendEmail(user) {
+    if(!user) {
+      throw new ApiException('用户信息不存在',ApiErrorCode.USER_NO_EXIT);
+    }
+    const token = encryptMD5(user.email + user.password + SECRET);
+    // 发送验证邮件
+    let sendState = await this.mailer.sendActiveMail('linhaifeng3@huya.com',token,user.username);
+    this.logger.log('验证邮件token',JSON.stringify(`${token},${user.email},${user.username}`))
+    if(sendState === 'success') {
+      return true
+    } else {
+      throw new ApiException('邮件发送失败',ApiErrorCode.TIMEOUT);
+    }
   }
   /**
    *
@@ -132,10 +143,7 @@ export class AuthService {
     user.active = true;
     try {
       await this.usersService.save(user);
-      return {
-        code: 200,
-        msg: '帐号已被激活'
-      }
+      return apiSuccessMsg()
     } catch (e) {
       throw new ApiException(e,ApiErrorCode.TIMEOUT);
     }

@@ -17,7 +17,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
-    this.logger.log(`exception: ${JSON.stringify(exception.message)}`,);
+    this.logger.log(`exception: ${JSON.stringify(exception)}`,);
     // 错误码400 判断是否有管道的验证信息
     if (status === HttpStatus.BAD_REQUEST) {
       let msg = exception.message.error;

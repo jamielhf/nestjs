@@ -1,11 +1,4 @@
-/*
- * @Author: your name
- * @Date: 2019-12-23 10:13:58
- * @LastEditTime: 2019-12-23 18:23:55
- * @LastEditors: your name
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\core\mailer\mailer.interface.ts
- */
+
 export interface IOption {
     host: string,  // 邮箱smtp地址
     port: number | string, // 端口号

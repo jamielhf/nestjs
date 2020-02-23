@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ServicesModule } from './services/services.modules';
-import { LogServive } from './log/log.service';
+import { LogModule } from './log/log.module';
 
 @Module({
   imports:[
     ServicesModule,
+    LogModule,
   ],
   providers:[
-    LogServive
   ],
   exports:[
     ServicesModule,
-    LogServive
+    LogModule
   ]
 })
 export class CommonModule {}

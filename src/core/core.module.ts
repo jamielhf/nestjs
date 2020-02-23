@@ -27,7 +27,6 @@ import { RedisService } from './redis/redis.service';
       },
       inject: [ConfigService],
     }),
-    // MailerModule,
     MailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService) => {
