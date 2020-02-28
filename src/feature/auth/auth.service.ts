@@ -9,6 +9,8 @@ import { MailService } from '../../common/services/mail.service';
 import {SECRET} from  '../../config/app'
 import { RedisService } from '../../core/redis/redis.service';
 import { LogServive } from '../../common/log/log.service';
+import { GitHubProfile } from './github.strategy';
+
 
 @Injectable()
 export class AuthService {
@@ -52,12 +54,20 @@ export class AuthService {
       throw new ApiException('账号没激活,已重新发送邮件到注册邮箱',ApiErrorCode.LOGIN_FAIL);
     }
     const payload = { username: user.username, sub: user.id };
+    
     const token = this.jwtService.sign(payload);
-    await this.redisService.set(user.id,token,100);
+    await this.redisService.set(user.id,token);
     return apiSuccessMsg({
         token,
     })
   }
+  /**
+   *
+   * 登出
+   * @param {*} req
+   * @returns
+   * @memberof AuthService
+   */
   async logout(req){
     if(req.user && req.user.id) {
       await this.redisService.del(req.user.id);
@@ -107,6 +117,52 @@ export class AuthService {
   async resetPassword() {
 
   }
+
+  async github(profile: GitHubProfile) {
+    if(!profile) {
+      throw new ApiException('您 GitHub 账号的 认证失败',ApiErrorCode.USER_NO_EXIT);
+    }
+    // 获取用户的邮箱
+    const email = profile.emails && profile.emails[0] && profile.emails[0].value;
+    // 根据 githubId 查找用户
+    let existUser = await this.usersService.findOne({github_id: profile.id});
+    console.log(1,existUser)
+    // 用户不存在则创建
+    if (!existUser) {
+      let user = {
+        nick_name: profile.username,
+        username: profile.username,
+        password: '',
+        active: true,
+        email: email || existUser.email,
+        avatar: profile._json.avatar_url,
+        github_accesstoken: profile.accessToken,
+        github_username: profile.username,
+        github_id: profile.id,
+        type: 'user',
+      }
+        existUser = await this.usersService.save(user);
+    } else {
+      existUser.email = email || existUser.email;
+      existUser.avatar = profile._json.avatar_url;
+      existUser.github_accesstoken = profile.accessToken;
+    }
+    const payload = { username: existUser.username, sub: existUser.id };
+    
+    const token = this.jwtService.sign(payload);
+    // 设置白名单
+    await this.redisService.set(existUser.id,token);
+    return apiSuccessMsg({
+        token,
+    })
+  }
+  /**
+   *
+   * 发送邮箱验证码
+   * @param {*} user
+   * @returns
+   * @memberof AuthService
+   */
   async resendEmail(user) {
     if(!user) {
       throw new ApiException('用户信息不存在',ApiErrorCode.USER_NO_EXIT);

@@ -37,6 +37,9 @@ export class ConfigService {
       MAIL_SERVICE: Joi.string().required(),
       REDIS_HOST:Joi.string().required(),
       REDIS_PORT:Joi.string().required(),
+      GITHUB_CLIENT_ID:Joi.string().required(),
+      GITHUB_CLIENT_SECRET:Joi.string().required(),
+      HOST: Joi.string().required(),
     });
 
     const { error, value: validatedEnvConfig } = envVarsSchema.validate(

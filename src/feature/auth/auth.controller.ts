@@ -3,7 +3,6 @@ import { Controller, Get,Render, Param,Req, Post, Res,UseGuards, Query, Body, Ba
 import { AuthService } from './auth.service';
 import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 import {logger} from '../../core/decorators/logger.decorators'
 import { LogServive } from '../../common/log/log.service';
 
@@ -90,4 +89,17 @@ export class AuthController {
       csrf :req.csrfToken()
     }
   }
+
+  @Get('github')
+  @UseGuards(AuthGuard('github'))
+  async github() {
+    return null
+  }
+
+  @UseGuards(AuthGuard('github'))
+  @Get('github/callback')
+    async githubCallback(@Req() req, @Res() res) {
+        const result = await this.authService.github(req.user);
+        res.json(result)
+    }
 }

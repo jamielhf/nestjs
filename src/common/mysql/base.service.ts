@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -22,6 +22,7 @@ export abstract class BaseService {
    * @returns {Promise<any>}
    * @memberof BaseService
    */
+  @UseInterceptors(ClassSerializerInterceptor)
   async findOne(query): Promise<any> {
     return await this.repository.findOne(query);
   }
@@ -32,6 +33,7 @@ export abstract class BaseService {
    * @returns {Promise<any>}
    * @memberof BaseService
    */
+  @UseInterceptors(ClassSerializerInterceptor)
   async find(query): Promise<any> {
     return await this.repository.find(query);
   }
