@@ -6,12 +6,14 @@
     <meta name="csrf-token" content="{{csrf}}">
   </head>
   <body>
+    
     {{ message }}
     用户名<input type="text" value="jamie52" id="username"><br/>
     邮箱<input type="text"  value="5693097@qq.com" id="email"><br/>
     密码<input type="password" value="123456"  id="password"><br/>
     token<input type="text" value=""  id="token"><br/>
-    
+     <a id="gitbub">github登陆</a>
+     <div id="iframe"></div>
     <br/>
     <button id="login">登录</button>  
       <br/>
@@ -30,7 +32,7 @@
         $.ajax({
               url:'/api/auth/register',
               type:'post',
-              dataType:'json',
+              dataType:'text/html',
               headers: {
             'CSRF-Token': token // <-- is the csrf token as a header
             },
@@ -61,7 +63,7 @@
             }).done((res) => {
               console.log(res);
               if(res.code==200 && res.data) {
-                sessionStorage.setItem('token',res.data.token)
+                localStorage.setItem('token',res.data.token)
               }
             }).fail((res) => {
               console.log(res);
@@ -92,7 +94,7 @@
               dataType:'json',
               headers: {
               'CSRF-Token': token, // <-- is the csrf token as a header
-               Authorization: `Bearer ${sessionStorage.getItem('token')}`
+               Authorization: `Bearer ${localStorage.getItem('token')}`
               },
             }).done((res) => {
               console.log(res);
@@ -107,13 +109,17 @@
               dataType:'json',
               headers: {
               'CSRF-Token': token, // <-- is the csrf token as a header
-               Authorization: `Bearer ${sessionStorage.getItem('token')}`
+               Authorization: `Bearer ${localStorage.getItem('token')}`
               },
             }).done((res) => {
               console.log(res);
             }).fail((res) => {
               console.log(res);
             })
+    })
+    $('#gitbub').click(()=>{
+     window.open('/api/auth/github','','width=400,height=400');
+     //  $('#iframe').html(`<iframe src="/api/auth/proxy"></iframe>`)
     })
     
      </script>

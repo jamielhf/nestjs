@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>App</title>
+     <meta name="login-token" content="{{token}}">
+  </head>
+  <body>
+
+    中间页跳转
+    <script>
+      var token = document.querySelector('meta[name="login-token"]').getAttribute('content');
+       localStorage.setItem('token',token);
+       if(token){
+       window.opener.location.reload(); 
+      window.close();
+
+       }
+    </script>
+    </body>
+</html>

@@ -81,6 +81,32 @@ export class AuthController {
     res.json(result)
    return result;
   }
+
+ /**
+  * github登陆
+  */
+  @Get('github')
+  @UseGuards(AuthGuard('github'))
+  async github() {
+    return null
+  }
+ /**
+  * github登陆回调
+  */
+  @UseGuards(AuthGuard('github'))
+  @Get('github/callback')
+  async githubCallback(@Req() req, @Res() res) {
+    try {
+     const result = await this.authService.github(req.user);
+     console.log(22,result);
+      res.render('proxy',{
+        token: result.token
+      });
+    } catch (e) {
+      console.log(e);
+    }
+     
+  }
   // 注册页面 测试用
   @Get('register')
   @Render('register')
@@ -89,17 +115,11 @@ export class AuthController {
       csrf :req.csrfToken()
     }
   }
-
-  @Get('github')
-  @UseGuards(AuthGuard('github'))
-  async github() {
-    return null
+  // 注册页面 测试用
+  @Get('proxy')
+  async proxy(@Req() req, @Res() res) {
+    res.render('proxy',{
+      token: 123132
+    });
   }
-
-  @UseGuards(AuthGuard('github'))
-  @Get('github/callback')
-    async githubCallback(@Req() req, @Res() res) {
-        const result = await this.authService.github(req.user);
-        res.json(result)
-    }
 }

@@ -126,7 +126,6 @@ export class AuthService {
     const email = profile.emails && profile.emails[0] && profile.emails[0].value;
     // 根据 githubId 查找用户
     let existUser = await this.usersService.findOne({github_id: profile.id});
-    console.log(1,existUser)
     // 用户不存在则创建
     if (!existUser) {
       let user = {
@@ -152,9 +151,9 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
     // 设置白名单
     await this.redisService.set(existUser.id,token);
-    return apiSuccessMsg({
+    return {
         token,
-    })
+    }
   }
   /**
    *
