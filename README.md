@@ -104,16 +104,19 @@ tagsTitleArray: ["测试"]
 
 ```
 id: "5562b419e4b00c57d9b94ae2"
-name: "后端"
-title: "backend"
-createdAt: "2016-03-09T00:38:00Z"
-updatedAt: "2015-05-24T21:33:13Z"
-icon: "https://lc-mhke0kuv.cn-n1.lcfile.com/a2ec01b816abd4c5.png"
-background: "https://lc-mhke0kuv.cn-n1.lcfile.com/fb3b208d06e6fe32.png"
-tagId: "5597a063e4b08a686ce57030"
-weight: "01"
-isSubscribe: false
+title: "前端"
+createdAt: "2015-07-04T00:59:06Z"
+updatedAt: "2017-06-18T23:34:05Z"
+icon: "https://lc-gold-cdn.xitu.io/bac28828a49181c34110.png"
+showOnNav: true
+relationTagId: ""
+isCategory: true
+entryCount: 40489
+subscribersCount: 419912
+isSubscribe: true
 ```
+
+
 
 ### 关注粉丝用户表设计
 
@@ -124,6 +127,10 @@ CREATE TABLE `com_wechat_user_follow` (
   `createtime` int(10) DEFAULT '0' COMMENT '关注时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户关注表';
+
+## 常用命令和知识点
+
+
 
 ## License
 

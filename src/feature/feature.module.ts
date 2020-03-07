@@ -4,6 +4,9 @@ import { UsersModule } from './users/users.module';
 import { ArticleModule } from './article/article.module';
 import { AuthModule } from './auth/auth.module';
 import { CoreModule } from '../core/core.module';
+import { TagController } from './tag/tag/tag.controller';
+import { TagController } from './tag/tag.controller';
+import { TagModule } from './tag/tag.module';
 
 @Module({
   imports: [
@@ -11,6 +14,7 @@ import { CoreModule } from '../core/core.module';
     UsersModule,
     AuthModule,
     ArticleModule,
+    TagModule,
   ],
   providers:[
   ],
@@ -18,6 +22,7 @@ import { CoreModule } from '../core/core.module';
     UsersModule,
     AuthModule,
     ArticleModule,
-  ]
+  ],
+  controllers: [TagController]
 })
 export class FeatureModule {}
