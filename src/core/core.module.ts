@@ -4,7 +4,6 @@ import { ConfigModule } from './config/config.module';
 import { MailerModule } from './mailer/mailer.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from './config/config.service';
-import { LogServive } from '../common/log/log.service';
 import { RedisService } from './redis/redis.service';
 
 @Module({
@@ -48,7 +47,7 @@ import { RedisService } from './redis/redis.service';
     })
   ],
   providers:[
-    LogServive,{
+    {
       provide: 'RedisService',
       useFactory: (configService: ConfigService) => {
         const options: any = configService.getKeys(['REDIS_PORT','REDIS_HOST']);

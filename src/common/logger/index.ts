@@ -1,6 +1,4 @@
 import { configure, getLogger,connectLogger } from 'log4js';
-import { join } from 'path';
-import { Injectable, Global } from '@nestjs/common';
 
 configure({
   appenders: { 
@@ -35,16 +33,6 @@ configure({
   }
 });
 
-@Injectable()
-export class LogServive {
-  private readonly logger: any;
-  constructor(){
-    this.logger = getLogger('default');
-  }
-  public log(...args){
-    this.logger.info(...args);
-  }
-  public err(msg){
-    this.logger.error(msg);
-  }
-}
+export const requestLogger = getLogger('req');
+export const logger = getLogger('oth');
+export const errorLogger = getLogger('err');

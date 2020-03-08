@@ -1,14 +1,13 @@
 import { ExceptionFilter, Catch, ArgumentsHost,BadRequestException, HttpException,HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ApiException } from './api.exception';
-import { LogServive } from '../../common/log/log.service';
+import { errorLogger } from '../../common/logger';
 
 
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   constructor(
-    private readonly logger : LogServive
   ){
 
   }
@@ -17,7 +16,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
-    this.logger.log(`exception: ${JSON.stringify(exception)}`,);
+    errorLogger.error(`exception: ${JSON.stringify(exception)}`,);
     // 错误码400 判断是否有管道的验证信息
     if (status === HttpStatus.BAD_REQUEST) {
       let msg = exception.message.error;

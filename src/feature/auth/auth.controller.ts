@@ -3,14 +3,11 @@ import { Controller, Get,Render, Param,Req, Post, Res,UseGuards, Query, Body, Ba
 import { AuthService } from './auth.service';
 import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
-import {logger} from '../../core/decorators/logger.decorators'
-import { LogServive } from '../../common/log/log.service';
 
 
 @Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService,
-    private readonly logger: LogServive,
     ) { }
   /**
    *
@@ -21,7 +18,6 @@ export class AuthController {
    * @memberof AuthController
    */
   @Post('login')
-  @logger()
   async login(@Body() body:LoginDto,@Res() res,@Req() req) {
     let result = await this.authService.login(body);
     res.json(result);
@@ -38,7 +34,6 @@ export class AuthController {
    */
   @UseGuards(AuthGuard('jwt'))
   @Get('logout')
-  @logger()
   async logout(@Res() res,@Req() req) {
     let result = await this.authService.logout(req);
     res.json(result);
@@ -46,7 +41,6 @@ export class AuthController {
   }
 
   @Post('resetPassword')
-  @logger()
   async resetPassword(@Res() res,@Req() req) {
     let result = await this.authService.resetPassword();
     res.json(result);
@@ -60,7 +54,6 @@ export class AuthController {
    * @memberof AuthController
    */
   @Post('register')
-  @logger()
   async register(@Body() body:ResgisterDto,@Res() res) {
      const result = await this.authService.register(body);
      res.json(result)
@@ -75,7 +68,6 @@ export class AuthController {
    * @memberof AuthController
    */
   @Post('activeRegister')
-  @logger()
   async activeRegister(@Body() body:ActiveRegisterDto,@Res() res) {
     const result = await this.authService.activeRegister(body);
     res.json(result)

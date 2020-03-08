@@ -8,8 +8,8 @@ import { md5, encryptMD5, diffEncryptMD5, apiSuccessMsg } from '../../common/uti
 import { MailService } from '../../common/services/mail.service';
 import {SECRET} from  '../../config/app'
 import { RedisService } from '../../core/redis/redis.service';
-import { LogServive } from '../../common/log/log.service';
 import { GitHubProfile } from './github.strategy';
+import { logger } from '../../common/logger';
 
 
 @Injectable()
@@ -19,7 +19,6 @@ export class AuthService {
     private readonly redisService: RedisService,
     private readonly jwtService: JwtService,
     private readonly mailer:MailService,
-    private readonly logger: LogServive,
   ) {}
 /**
  * 重新验证
@@ -169,7 +168,7 @@ export class AuthService {
     const token = encryptMD5(user.email + user.password + SECRET);
     // 发送验证邮件
     let sendState = await this.mailer.sendActiveMail('linhaifeng3@huya.com',token,user.username);
-    this.logger.log('验证邮件token',JSON.stringify(`${token},${user.email},${user.username}`))
+    logger.info('验证邮件token',JSON.stringify(`${token},${user.email},${user.username}`))
     if(sendState === 'success') {
       return true
     } else {
