@@ -4,31 +4,25 @@ import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Users {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ length: 50 })
   username: string;
 
-  @Column({ length: 100,default:'' })
-  nick_name: string;
+  @Column({ length: 100,default:'',name:'nick_name' })
+  nickName: string;
 
-  @Column({length:200,default:''})
+  @Column({length:200,default:'', comment: '个人介绍',})
   decs: string;
-
-  @Column({type:'int',default:0})
-  fans_num: number;
-
-  @Column({type:'int',default:0})
-  focus_num: number;
 
   @Column({
    type:'text',
   })
   avatar: string
 
-  @Column({length:50,default:'user'})
-  type: string
+  @Column('simple-enum', { enum: ['admin', 'visitor'], default: 'visitor' })
+  role: string; // 用户角色
 
   @Exclude()
   @Column({length:50})
@@ -37,24 +31,26 @@ export class Users {
   @Column({length:50})
   email:string
 
-  @Column({type:'int',default:0})
+  @Column('simple-enum', { enum: [1, 0], default: 0 })
   active: number
 
-  @Column({length:50,default:''})
-  github_id:string
+  @Column({length:50,default:'',name:'github_id'})
+  githubId:string
 
-  @Column({length:50,default:''})
-  github_username:string
+  @Column({length:50,default:'',name:'github_accesstoken'})
+  githubAccesstoken:string
 
-  @Exclude()
-  @Column({length:50,default:''})
-  github_accesstoken:string
+  @CreateDateColumn({
+    type: 'datetime',
+    comment: '创建时间',
+    name:'create_time'
+  })
+  createTime:Date
 
-  @Exclude()
-  @CreateDateColumn({})
-  create_time:Date
-
-  @Exclude()
-  @UpdateDateColumn({})
-  update_time:Date
+  @UpdateDateColumn({
+    type: 'datetime',
+    comment: '更新时间',
+    name:'update_time'
+  })
+  updateTime:Date
 }

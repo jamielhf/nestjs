@@ -124,13 +124,69 @@ CREATE TABLE `com_wechat_user_follow` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `uid` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户ID',
   `fid` bigint(20) NOT NULL DEFAULT '0' COMMENT '关注用户ID',
+  `status` bigint(20) NOT NULL DEFAULT '0' COMMENT '关注状态:是否取消关注等',
   `createtime` int(10) DEFAULT '0' COMMENT '关注时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户关注表';
 
-## 常用命令和知识点
+### 文章
 
+#### 文章缩略
+```js
+{
+  commentsCount: 7
+  id: "5e63906b518825493776079c"
+  tags: [{ngxCachedTime: 1583649682, ngxCached: true, title: "Vue.js", id: "555e9a98e4b00c57d9955f68",…}],
+  category:{},
+   createdAt: "2020-03-07T12:15:39.462Z",
+  updatedAt: "2020-03-07T12:15:39.462Z",
+  user:{
 
+  }
+}
+
+```
+#### 文章内容详情
+
+```js
+{
+  entryViewId: "5e63906bf265da571e26296d", // ？
+  entryId: "5e63906b518825493776079c", // ？
+  content:'',  // 文章内容
+  transcodeContent:'',  // 转义后
+  imageCache:{  // 应该是图片缓存地址
+    screenShot: null,
+    imageUrlArray: []
+  },
+  auto: false,
+  version: 2, // 版本
+  createdAt: "2020-03-07T12:15:39.462Z",
+  updatedAt: "2020-03-07T12:15:39.462Z",
+}
+
+```
+
+### 评论
+```js
+{
+  id: "5e63ad0cf265da7550d25c9d"
+  content: "还是我豪哥👍"
+  userId: "5da9915a51882562dc416c19"
+  respUser: "5dbe78766fb9a02075109419"
+  respComment: ""
+  userInfo: {}
+  respUserInfo: {}
+  likesCount: 0
+  picList: []
+  createdAt: "2020-03-07T14:17:48.594Z"
+  updatedAt: "2020-03-07T14:17:48.594Z"
+  subCount: 0
+  replyCount: 0
+  topComment: []
+  isLiked: false
+}
+
+```
 
 ## License
 

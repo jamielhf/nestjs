@@ -95,7 +95,7 @@ export class AuthService {
     }
     let user = {
       ...data,
-      nick_name:data.username,
+      nickName:data.username,
       password: md5(data.password),
       avatar:'https://huyaimg.msstatic.com/avatar/1076/7e/e1d48955f39a25fb944f4dedb3ed16_180_135.jpg',
       type:'user',
@@ -125,26 +125,26 @@ export class AuthService {
     // 获取用户的邮箱
     const email = profile.emails && profile.emails[0] && profile.emails[0].value;
     // 根据 githubId 查找用户
-    let existUser = await this.usersService.findOne({github_id: profile.id});
+    let existUser = await this.usersService.findOne({githubId: profile.id});
     // 用户不存在则创建
     if (!existUser) {
       let user = {
-        nick_name: profile.username,
+        nickName: profile.username,
         username: profile.username,
         password: '',
-        active: true,
+        active: 1,
         email: email || existUser.email,
         avatar: profile._json.avatar_url,
-        github_accesstoken: profile.accessToken,
-        github_username: profile.username,
-        github_id: profile.id,
+        githubAccesstoken: profile.accessToken,
+        githubUsername: profile.username,
+        githubId: profile.id,
         type: 'user',
       }
         existUser = await this.usersService.save(user);
     } else {
       existUser.email = email || existUser.email;
       existUser.avatar = profile._json.avatar_url;
-      existUser.github_accesstoken = profile.accessToken;
+      existUser.githubAccesstoken = profile.accessToken;
     }
     const payload = { username: existUser.username, sub: existUser.id };
     
@@ -195,7 +195,7 @@ export class AuthService {
     if(!diffEncryptMD5(keyCode, key)) {
       throw new ApiException('信息有误，帐号无法被激活。',ApiErrorCode.TOEKN_INVALID);
     }
-    user.active = true;
+    user.active = 1;
     try {
       await this.usersService.save(user);
       return apiSuccessMsg()

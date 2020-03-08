@@ -4,9 +4,9 @@ import { UsersModule } from './users/users.module';
 import { ArticleModule } from './article/article.module';
 import { AuthModule } from './auth/auth.module';
 import { CoreModule } from '../core/core.module';
-import { TagController } from './tag/tag/tag.controller';
 import { TagController } from './tag/tag.controller';
 import { TagModule } from './tag/tag.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -15,6 +15,7 @@ import { TagModule } from './tag/tag.module';
     AuthModule,
     ArticleModule,
     TagModule,
+    CategoryModule,
   ],
   providers:[
   ],

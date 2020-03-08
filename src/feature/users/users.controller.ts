@@ -1,7 +1,8 @@
 
-import {ClassSerializerInterceptor, Controller,Post,Request, Get, Param, Res,HttpStatus,UseGuards, Response} from '@nestjs/common';
+import {ClassSerializerInterceptor, Controller,Post,Request, Get, Param, Res,HttpStatus,UseGuards, Response, Body} from '@nestjs/common';
 import { UsersService } from './users.service';
 import {AuthGuard} from '@nestjs/passport';
+import { UserInfoDto } from './dto/users.dto';
 
 @Controller('api/user')
 export class UserController {
@@ -17,10 +18,10 @@ export class UserController {
    */
   @UseGuards(AuthGuard('jwt'))
   @Get('info')
-  async getInfo(@Request() req) {
-    if(req.user && req.user.username) {
+  async getInfo(@Body() body:UserInfoDto) {
+    if(body.userId) {
       const data = await this.userService.findOne({
-        username:req.user.username
+        id: body.userId
       });
       return {
         code: 200,
@@ -29,4 +30,5 @@ export class UserController {
     }
     
   }
+  
 }
