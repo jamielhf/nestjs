@@ -1,9 +1,12 @@
 
-import {ClassSerializerInterceptor, Controller,Post,Request, Get, Param, Res,HttpStatus,UseGuards, Response, Body} from '@nestjs/common';
+import {ClassSerializerInterceptor, Controller,Post,Request, Get, Param, Res,HttpStatus,UseGuards, Response, Body, Req, UseInterceptors} from '@nestjs/common';
 import { UsersService } from './users.service';
 import {AuthGuard} from '@nestjs/passport';
 import { UserInfoDto } from './dto/users.dto';
+import { LoggingInterceptor } from '../../core/interceptor/logging.interceptor';
 
+
+@UseInterceptors(LoggingInterceptor)
 @Controller('api/user')
 export class UserController {
   constructor(
@@ -18,17 +21,16 @@ export class UserController {
    */
   @UseGuards(AuthGuard('jwt'))
   @Get('info')
-  async getInfo(@Body() body:UserInfoDto) {
-    if(body.userId) {
-      const data = await this.userService.findOne({
-        id: body.userId
-      });
+  async getInfo(@Body() body, @Req() req) {
+    let userId = body.userId ||  req.user.id;
+    if(userId) {
+        const data = await this.userService.findOne({
+          id: userId
+        });
       return {
-        code: 200,
         data
       };
     }
-    
   }
   
 }
