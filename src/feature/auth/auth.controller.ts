@@ -1,10 +1,12 @@
 
-import { Controller, Get,Render, Param,Req, Post, Res,UseGuards, Query, Body, BadRequestException, Next, Logger } from '@nestjs/common';
+import { Controller, Get,Render, Param,Req, Post, Res,UseGuards, Query, Body, BadRequestException, Next, Logger, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { LoggingInterceptor } from '../../core/interceptor/logging.interceptor';
 
 
+@UseInterceptors(LoggingInterceptor)
 @Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService,
@@ -20,7 +22,6 @@ export class AuthController {
   @Post('login')
   async login(@Body() body:LoginDto,@Res() res,@Req() req) {
     let result = await this.authService.login(body);
-    res.json(result);
     return result;
   }
 
@@ -36,14 +37,12 @@ export class AuthController {
   @Get('logout')
   async logout(@Res() res,@Req() req) {
     let result = await this.authService.logout(req);
-    res.json(result);
     return result;
   }
 
   @Post('resetPassword')
   async resetPassword(@Res() res,@Req() req) {
     let result = await this.authService.resetPassword();
-    res.json(result);
     return result;
   }
   /**
@@ -56,7 +55,6 @@ export class AuthController {
   @Post('register')
   async register(@Body() body:ResgisterDto,@Res() res) {
      const result = await this.authService.register(body);
-     res.json(result)
     return result;
   }
 
@@ -70,7 +68,6 @@ export class AuthController {
   @Post('activeRegister')
   async activeRegister(@Body() body:ActiveRegisterDto,@Res() res) {
     const result = await this.authService.activeRegister(body);
-    res.json(result)
    return result;
   }
 
@@ -90,7 +87,6 @@ export class AuthController {
   async githubCallback(@Req() req, @Res() res) {
     try {
      const result = await this.authService.github(req.user);
-     console.log(22,result);
       res.render('proxy',{
         token: result.token
       });
@@ -98,20 +94,5 @@ export class AuthController {
       console.log(e);
     }
      
-  }
-  // 注册页面 测试用
-  @Get('register')
-  @Render('register')
-  async renderRegister(@Req() req,@Query() query) {
-    return {
-      csrf :req.csrfToken()
-    }
-  }
-  // 注册页面 测试用
-  @Get('proxy')
-  async proxy(@Req() req, @Res() res) {
-    res.render('proxy',{
-      token: 123132
-    });
   }
 }

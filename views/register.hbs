@@ -63,7 +63,7 @@
             }).done((res) => {
               console.log(res);
               if(res.code==200 && res.data) {
-                localStorage.setItem('token',res.data.token)
+                localStorage.setItem('token',res.data)
               }
             }).fail((res) => {
               console.log(res);

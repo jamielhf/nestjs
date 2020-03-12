@@ -18,7 +18,7 @@ async function bootstrap() {
   );
   // 全局异常捕获
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new LoggingInterceptor());
+  // app.useGlobalInterceptors(new LoggingInterceptor());
   
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
@@ -33,12 +33,12 @@ async function bootstrap() {
     forbidUnknownValues: true,
   }));
 
-  app.use(connectLogger(getLogger('default'), 
-    {
-      level: 'info',
-      format: ':method :url :status :response-timems :referrer'
-    })
-  );
+  // app.use(connectLogger(getLogger('default'), 
+  //   {
+  //     level: 'info',
+  //     format: ':method :url :status :response-timems :referrer'
+  //   })
+  // );
   // csrf
   app.use(cookieParser())
   app.use(csurf({ cookie: true }));

@@ -56,9 +56,9 @@ export class AuthService {
     
     const token = this.jwtService.sign(payload);
     await this.redisService.set(user.id,token);
-    return apiSuccessMsg({
-        token,
-    })
+    return {
+        data: token,
+    }
   }
   /**
    *
@@ -70,7 +70,9 @@ export class AuthService {
   async logout(req){
     if(req.user && req.user.id) {
       await this.redisService.del(req.user.id);
-      return apiSuccessMsg();
+      return {
+        msg: '登出'
+      }
     } else {
       throw new ApiException('没有用户信息',ApiErrorCode.USER_NO_EXIT);
     }
@@ -104,7 +106,9 @@ export class AuthService {
       if(res) {
        const r =  await this.resendEmail(user);
        if(r) {
-         return apiSuccessMsg({},'注册成功，已经发送验证邮件');
+         return {
+           msg: '注册成功，已经发送验证邮件'
+         }
        }
        
       }
@@ -197,7 +201,9 @@ export class AuthService {
     user.active = 1;
     try {
       await this.usersService.save(user);
-      return apiSuccessMsg()
+      return {
+        msg: '已激活'
+      }
     } catch (e) {
       throw new ApiException(e,ApiErrorCode.TIMEOUT);
     }

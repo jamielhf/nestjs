@@ -16,6 +16,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
+    const url = request.originalUrl;
+    const statusCode = response.statusCode;
+    errorLogger.error(`${url}-${statusCode}`,request.body);
     errorLogger.error(`exception: ${JSON.stringify(exception)}`,);
     // 错误码400 判断是否有管道的验证信息
     if (status === HttpStatus.BAD_REQUEST) {
@@ -24,8 +27,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       if(message) {
         if(Array.isArray(message)) {
           message.forEach((val,key)=>{
-            if(val['constraints']['matches']) {
-              msg = val['constraints']['matches'];
+            if(Object.values(val['constraints'])[0]) {
+              msg = Object.values(val['constraints'])[0];
               return false;
             }
           })
@@ -33,7 +36,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
           msg = message;
         }
       }
-     
       response
         .status(200)
         .json({
