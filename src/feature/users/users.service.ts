@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './users.entity';
 import { BaseService } from '../../common/mysql/base.service';
+import { logger } from '../../common/logger';
 
 @Injectable()
 export class UsersService extends BaseService {
@@ -19,5 +20,24 @@ export class UsersService extends BaseService {
       ...data,
     }
     return this.repository.save(user)
+  }
+  
+  async updateUserInfo(data,userId) {
+    try {
+      const res = await this.repository.update(userId,{
+        [data.field]: data.value
+      })
+      if(res) {
+        return {
+          msg: '更新成功'
+        }
+      }
+    } catch (e) {
+      logger.error(e);
+      return {
+        msg: '更新失败'
+      }
+    }
+    
   }
 }
