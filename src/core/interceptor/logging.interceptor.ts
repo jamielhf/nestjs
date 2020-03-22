@@ -23,7 +23,7 @@ export class LoggingInterceptor implements NestInterceptor {
             data: (data &&  data.data) || {},
           };
           requestLogger.info(`${url}-${statusCode}`, JSON.stringify(res));
-          return response.json(res);
+          response.json(res);
         })
       );
   }

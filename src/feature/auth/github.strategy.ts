@@ -55,7 +55,7 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
         super({
             clientID: config.getString('GITHUB_CLIENT_ID'),
             clientSecret: config.getString('GITHUB_CLIENT_SECRET'),
-            callbackURL: `http://${config.getString('HOST')}:${config.getString('PORT')}/api/auth/github/callback`,
+            callbackURL: `http://${config.getString('HOST')}:${config.getString('PORT')}/view/github/callback`,
         });
     }
     async validate(accessToken, refreshToken, profile: GitHubProfile, done: Function) {

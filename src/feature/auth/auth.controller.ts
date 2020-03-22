@@ -1,5 +1,5 @@
 
-import { Controller, Get,Render, Param,Req, Post, Res,UseGuards, Query, Body, BadRequestException, Next, Logger, UseInterceptors } from '@nestjs/common';
+import { Controller, Get,Render, Param,Req, Post, Res,UseGuards, Query, Body, BadRequestException, Next, Logger, UseInterceptors, Redirect } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -78,21 +78,5 @@ export class AuthController {
   @UseGuards(AuthGuard('github'))
   async github() {
     return null
-  }
- /**
-  * github登陆回调
-  */
-  @UseGuards(AuthGuard('github'))
-  @Get('github/callback')
-  async githubCallback(@Req() req, @Res() res) {
-    try {
-     const result = await this.authService.github(req.user);
-      res.render('proxy',{
-        token: result.token
-      });
-    } catch (e) {
-      console.log(e);
-    }
-     
   }
 }

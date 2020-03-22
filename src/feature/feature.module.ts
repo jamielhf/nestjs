@@ -7,7 +7,7 @@ import { CoreModule } from '../core/core.module';
 import { TagController } from './tag/tag.controller';
 import { TagModule } from './tag/tag.module';
 import { CategoryModule } from './category/category.module';
-import { TestModule } from './test/test.module';
+import { ViewModule } from './view/view.module';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { TestModule } from './test/test.module';
     ArticleModule,
     TagModule,
     CategoryModule,
-    TestModule,
+    ViewModule,
   ],
   providers:[
   ],
