@@ -42,6 +42,32 @@ export class ResgisterDto {
   })
   readonly email: string;
 }
+export class SetPasswordDto {
+  @IsNotEmpty({
+    message: '密码不能为空',
+  })
+  readonly password: string;
+  @IsNotEmpty({
+    message: '确认密码不能为空',
+  })
+  @IsEqualsThan('password', {
+    message: '两次密码输入不一致。',
+  })
+  readonly rePwd: string;
+  @IsNotEmpty({
+    message: 'token不能为空',
+  })
+  readonly token: string;
+}
+export class ForgetPasswordDto {
+  @IsNotEmpty({
+    message: '邮箱不能为空',
+  })
+  @IsEmail({}, {
+    message: '邮箱不合法',
+  })
+  readonly email: string
+}
 
 export class ResetPwdDto {
   @IsNotEmpty({

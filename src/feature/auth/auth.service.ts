@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus,Response } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto, ResgisterDto, ActiveRegisterDto, ResetPwdDto } from './dto/auth.dto';
+import { LoginDto, ResgisterDto, ActiveRegisterDto, ResetPwdDto, ForgetPasswordDto, SetPasswordDto } from './dto/auth.dto';
 import { ApiException } from '../../core/exceptions/api.exception';
 import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
 import { md5, encryptMD5, diffEncryptMD5, apiSuccessMsg } from '../../common/util';
@@ -118,7 +118,7 @@ export class AuthService {
    
   }
   /**
-   *
+   * 重设密码
    *
    * @param {ResetPwdDto} data
    * @param {*} userId
@@ -134,10 +134,77 @@ export class AuthService {
     return {
       msg: user.raw.affectedRows === 1 ? '更新成功' : '更新失败'
     }
-
-    
   }
-
+  /**
+   * 设置密码
+   *
+   * @param {SetPasswordDto} body
+   * @returns
+   * @memberof AuthService
+   */
+  async setPassword(body: SetPasswordDto) {
+    const email = await this.redisService.get(body.token);
+    if(!email) {
+      throw new ApiException('邮箱验证失败,token失效',ApiErrorCode.TOKEN_INVALID);
+    }
+    const user = await this.usersService.findOne({email});
+    if(user) {
+      logger.info('验证token', diffEncryptMD5(user.email + user.id + SECRET,body.token));
+       // 对比key是否正确
+      if(!diffEncryptMD5(user.email + user.id + SECRET,body.token)) {
+        throw new ApiException('邮箱验证失败',ApiErrorCode.TOKEN_INVALID);
+      } else {
+        const res = await this.usersService.update({
+          id: user.id,
+        },{
+          password: encryptMD5(body.password)
+        });
+        // 设置token失效
+        await this.redisService.del(body.token);
+        return {
+          msg: res.raw.affectedRows === 1 ? '更新成功' : '更新失败'
+        }
+      }
+    } else {
+      throw new ApiException('邮箱未注册',ApiErrorCode.USER_NO_EXIT);
+    }
+    
+   
+  }
+  
+  /**
+   *
+   * 发送重设密码邮件
+   * @param {ForgetPasswordDto} body
+   * @returns
+   * @memberof AuthService
+   */
+  async forgetPassword(body: ForgetPasswordDto) {
+    const user = await this.usersService.findOne({email: body.email});
+    if(!user) {
+      throw new ApiException('邮件未注册',ApiErrorCode.USER_NO_EXIT);
+    } else {
+      // 加密token
+      const token = encryptMD5(user.email + user.id + SECRET);
+      // 发送验证邮件
+      let sendState = await this.mailer.sendActiveMail(user.email,token,user.username);
+      logger.info('密码邮件token',JSON.stringify(`${token},${user.email},${user.username}`));
+      // 放redis 24h，重设密码后就删除
+      this.redisService.set(token,user.email, 24 * 3600);
+      if(sendState === 'success') {
+        return true
+      } else {
+        throw new ApiException('邮件发送失败',ApiErrorCode.TIMEOUT);
+      }
+    }
+  }
+  /**
+   * github登陆
+   *
+   * @param {GitHubProfile} profile
+   * @returns
+   * @memberof AuthService
+   */
   async github(profile: GitHubProfile) {
     if(!profile) {
       throw new ApiException('您 GitHub 账号的 认证失败',ApiErrorCode.USER_NO_EXIT);
@@ -213,7 +280,7 @@ export class AuthService {
     let keyCode = user.email + user.password + SECRET;
     // 对比key是否正确
     if(!diffEncryptMD5(keyCode, key)) {
-      throw new ApiException('信息有误，帐号无法被激活。',ApiErrorCode.TOEKN_INVALID);
+      throw new ApiException('信息有误，帐号无法被激活。',ApiErrorCode.TOKEN_INVALID);
     }
     user.active = 1;
     try {

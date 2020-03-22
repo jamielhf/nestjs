@@ -41,16 +41,16 @@ async function bootstrap() {
   // );
   // csrf
   app.use(cookieParser())
-  app.use(csurf({ cookie: true }));
-  app.use((err,req, res, next) => {
-    if (err.code !== 'EBADCSRFTOKEN') return next(err);
-    // handle CSRF token errors here
-    res.status(403)
-    res.json({
-      code : 403,
-      msg:'invalid csrf token'
-    })
-  })
+  // app.use(csurf({ cookie: true }));
+  // app.use((err,req, res, next) => {
+  //   if (err.code !== 'EBADCSRFTOKEN') return next(err);
+  //   // handle CSRF token errors here
+  //   res.status(403)
+  //   res.json({
+  //     code : 403,
+  //     msg:'invalid csrf token'
+  //   })
+  // })
   
   
 
