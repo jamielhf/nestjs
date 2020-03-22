@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus,Response } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
+import { LoginDto, ResgisterDto, ActiveRegisterDto, ResetPwdDto } from './dto/auth.dto';
 import { ApiException } from '../../core/exceptions/api.exception';
 import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
 import { md5, encryptMD5, diffEncryptMD5, apiSuccessMsg } from '../../common/util';
@@ -52,10 +52,10 @@ export class AuthService {
       await this.resendEmail(user);
       throw new ApiException('账号没激活,已重新发送邮件到注册邮箱',ApiErrorCode.LOGIN_FAIL);
     }
-    const payload = { username: user.username, sub: user.id };
+    const payload = { username: user.username, sub: user.id ,role: user.role };
     
     const token = this.jwtService.sign(payload);
-    await this.redisService.set(user.id,token);
+    await this.redisService.set(user.id,token, 12 * 3600);
     return {
         data: token,
     }
@@ -117,8 +117,25 @@ export class AuthService {
     }
    
   }
-  async resetPassword() {
+  /**
+   *
+   *
+   * @param {ResetPwdDto} data
+   * @param {*} userId
+   * @memberof AuthService
+   */
+  async resetPassword(data: ResetPwdDto,userId: string) {
+    const user = await this.usersService.update({
+      id: userId,
+      password: encryptMD5(data.oldPwd)
+    },{
+      password: encryptMD5(data.password)
+    });
+    return {
+      msg: user.raw.affectedRows === 1 ? '更新成功' : '更新失败'
+    }
 
+    
   }
 
   async github(profile: GitHubProfile) {
@@ -149,11 +166,11 @@ export class AuthService {
       existUser.avatar = profile._json.avatar_url;
       existUser.githubAccesstoken = profile.accessToken;
     }
-    const payload = { username: existUser.username, sub: existUser.id };
+    const payload = { username: existUser.username, sub: existUser.id};
     
     const token = this.jwtService.sign(payload);
     // 设置白名单
-    await this.redisService.set(existUser.id,token);
+    await this.redisService.set(existUser.id,token,24 * 3600);
     return {
         token,
     }

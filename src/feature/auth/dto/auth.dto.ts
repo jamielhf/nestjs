@@ -33,7 +33,7 @@ export class ResgisterDto {
   @IsEqualsThan('password', {
     message: '两次密码输入不一致。',
   })
-  readonly repwd: string;
+  readonly rePwd: string;
   @IsNotEmpty({
     message: '邮箱不能为空',
   })
@@ -43,6 +43,23 @@ export class ResgisterDto {
   readonly email: string;
 }
 
+export class ResetPwdDto {
+  @IsNotEmpty({
+    message: '密码不能为空',
+  })
+  readonly oldPwd
+  @IsNotEmpty({
+    message: '密码不能为空',
+  })
+  readonly password: string;
+  @IsNotEmpty({
+    message: '确认密码不能为空',
+  })
+  @IsEqualsThan('password', {
+    message: '两次密码输入不一致。',
+  })
+  readonly rePwd: string;
+}
 
 export class ActiveRegisterDto {
   @IsNotEmpty({

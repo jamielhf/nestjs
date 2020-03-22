@@ -1,7 +1,7 @@
 
 import { Controller, Get,Render, Param,Req, Post, Res,UseGuards, Query, Body, BadRequestException, Next, Logger, UseInterceptors, Redirect } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, ResgisterDto, ActiveRegisterDto } from './dto/auth.dto';
+import { LoginDto, ResgisterDto, ActiveRegisterDto, ResetPwdDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggingInterceptor } from '../../core/interceptor/logging.interceptor';
 
@@ -40,9 +40,23 @@ export class AuthController {
     return result;
   }
 
+  @Post('forgetPwd')
+  async forgetPwd(@Res() res,@Req() req) {
+    // let result = await this.authService.resetPassword();
+    // return result;
+  }
+  /**
+   * 重设密码
+   *
+   * @param {*} res
+   * @param {*} req
+   * @returns
+   * @memberof AuthController
+   */
+  @UseGuards(AuthGuard('jwt'))
   @Post('resetPassword')
-  async resetPassword(@Res() res,@Req() req) {
-    let result = await this.authService.resetPassword();
+  async resetPassword(@Body() body:ResetPwdDto,@Req() req) {
+    let result = await this.authService.resetPassword(body,req.user.id);
     return result;
   }
   /**

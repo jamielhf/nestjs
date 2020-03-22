@@ -21,7 +21,14 @@ export class UsersService extends BaseService {
     }
     return this.repository.save(user)
   }
-  
+  /**
+   *
+   * 更新用户信息
+   * @param {*} data
+   * @param {*} userId
+   * @returns
+   * @memberof UsersService
+   */
   async updateUserInfo(data,userId) {
     try {
       const res = await this.repository.update(userId,{

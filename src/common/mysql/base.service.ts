@@ -17,6 +17,17 @@ export abstract class BaseService {
   }
   /**
    *
+   *
+   * @param {*} update userid
+   * @param {*} query
+   * @returns {Promise<any>}
+   * @memberof BaseService
+   */
+  async update(query,update): Promise<any> {
+    return await this.repository.update(query,update);
+  }
+  /**
+   *
    * 条件查找返回一个数据
    * @param {*} query
    * @returns {Promise<any>}

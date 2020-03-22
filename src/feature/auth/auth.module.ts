@@ -19,7 +19,7 @@ import { CoreModule } from '../../core/core.module';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '24h' },
+      signOptions: { expiresIn: '12h' },
     }),
   ],
   controllers:[AuthController],
