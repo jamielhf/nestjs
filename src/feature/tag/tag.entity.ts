@@ -5,8 +5,11 @@ import {
   PrimaryGeneratedColumn, 
   CreateDateColumn, 
   UpdateDateColumn,
-  ManyToMany } from 'typeorm';
+  ManyToMany, 
+  ManyToOne,
+  OneToMany} from 'typeorm';
   import { Article } from '../article/article.entity';
+import { Category } from '../category/category.entity';
 
 @Entity()
 export class Tag {
@@ -19,11 +22,17 @@ export class Tag {
   @Column()
   icon: string;
 
-  @ManyToMany(
+  @OneToMany(
     () => Article,
     article => article.tags
   )
-  articles: Array<Article>;
+  articles: Article;
+
+  @ManyToOne(
+    () => Category,
+    category => category.tags,
+  )
+  category: Category;
 
   @CreateDateColumn({
     type: 'datetime',

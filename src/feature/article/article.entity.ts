@@ -8,7 +8,8 @@ import {
   ManyToMany, 
   JoinTable,
   OneToOne,
-  JoinColumn} from 'typeorm';
+  JoinColumn,
+  ManyToOne} from 'typeorm';
 import {Tag} from '../tag/tag.entity'
 import {Category} from '../category/category.entity'
 import {Users} from '../users/users.entity'
@@ -18,21 +19,31 @@ export class Article {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToMany(
+  @Column({
+    type:'text',
+   })
+  content: string;
+
+  @Column({
+    length: 100,
+   })
+  title: string
+
+  @ManyToOne(
     () => Tag,
     tag => tag.articles,
     { cascade: true }
   )
   @JoinTable()
-  tags: Array<Tag>;
+  tags:Tag;
 
-  @ManyToMany(
+  @ManyToOne(
     () => Category,
     category => category.articles,
     { cascade: true }
   )
   @JoinTable()
-  categorys: Array<Category>;
+  category: Category;
 
   @OneToOne(type => Users)
   @JoinColumn()

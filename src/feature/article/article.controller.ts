@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req } from '@nestjs/common';
 
 @Controller('article')
 export class ArticleController {
@@ -14,7 +14,7 @@ export class ArticleController {
   }
   // 保存文章
   @Post('save')
-  saveArticle(){
+  saveArticle(@Body() body, @Req() req){
 
   }
   // 发布文章

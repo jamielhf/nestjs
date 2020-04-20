@@ -1,6 +1,6 @@
 import { ExtractJwt, Strategy,VerifiedCallback } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ExecutionContext } from '@nestjs/common';
 import { jwtConstants } from './constants';
 import { UsersService } from '../users/users.service';
 import { md5 } from 'utility';
@@ -20,13 +20,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: jwtConstants.secret,
     });
   }
-
   async validate(payload: any) {
+    console.log('payload',payload)
     const {username,} = payload;
     const user = await this.usersService.findOne({username});
     
     if (user) {
-      // token是否在redis中
+      // token是否在redis中 没有则不在登陆状态
       const token = await this.redisService.get(user.id);
       if(!token) {
         throw new UnauthorizedException();
