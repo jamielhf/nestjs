@@ -1,14 +1,15 @@
 
-import { 
-  Entity, 
-  Column, 
-  PrimaryGeneratedColumn, 
-  CreateDateColumn, 
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany, 
+  ManyToMany,
   ManyToOne,
-  OneToMany} from 'typeorm';
-  import { Article } from '../article/article.entity';
+  OneToMany
+} from 'typeorm';
+import { Article } from '../article/article.entity';
 import { Category } from '../category/category.entity';
 
 @Entity()
@@ -37,12 +38,14 @@ export class Tag {
   @CreateDateColumn({
     type: 'datetime',
     comment: '创建时间',
+    name: 'create_time'
   })
-  create_time:Date
+  createTime: Date
 
   @UpdateDateColumn({
     type: 'datetime',
     comment: '更新时间',
+    name: 'update_time'
   })
-  update_time:Date
+  updateTime: Date
 }

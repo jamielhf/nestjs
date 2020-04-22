@@ -1,22 +1,29 @@
-import { Controller, Post, Get } from '@nestjs/common';
+import { Controller, Post, Get, Body, Req } from '@nestjs/common';
+import { CategorySaveDto } from './dto/category.dto';
+import { CategoryService } from './category.service';
 
-@Controller('category')
+@Controller('api/category')
 export class CategoryController {
+   constructor(
+      private readonly categoryService: CategoryService,
+   ) { }
    // 保存分类
    @Post('save')
-   saveCategory(){
- 
+   async saveCategory(@Body() body: CategorySaveDto, @Req() req) {
+      return await this.categoryService.save(body)
    }
    // 更新分类
    @Post('update')
-   updateCategory(){
- 
+   updateCategory() {
+
    }
- 
+
    // 获取分类列表
    @Get('list')
-   getCategoryList(){
- 
+   getCategoryList() {
+      return {
+         a: 1
+      }
    }
- 
+
 }

@@ -19,13 +19,13 @@ import { ViewModule } from './view/view.module';
     CategoryModule,
     ViewModule,
   ],
-  providers:[
+  providers: [
   ],
-  exports:[
+  exports: [
     UsersModule,
     AuthModule,
     ArticleModule,
+    CategoryModule,
   ],
-  controllers: [TagController]
 })
-export class FeatureModule {}
+export class FeatureModule { }

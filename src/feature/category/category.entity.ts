@@ -1,12 +1,13 @@
 
-import { 
-  Entity, 
-  Column, 
-  PrimaryGeneratedColumn, 
-  CreateDateColumn, 
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany, 
-  OneToMany} from 'typeorm';
+  ManyToMany,
+  OneToMany
+} from 'typeorm';
 import { Article } from '../article/article.entity';
 import { Tag } from '../tag/tag.entity';
 
@@ -18,7 +19,9 @@ export class Category {
   @Column({ comment: 'Categorys名' })
   title: string;
 
-  @Column()
+  @Column({
+    type: 'text'
+  })
   icon: string;
 
   @OneToMany(
@@ -36,12 +39,14 @@ export class Category {
   @CreateDateColumn({
     type: 'datetime',
     comment: '创建时间',
+    name: 'create_time'
   })
-  create_time:Date
+  createTime: Date
 
   @UpdateDateColumn({
     type: 'datetime',
     comment: '更新时间',
+    name: 'update_time'
   })
-  update_time:Date
+  updateTime: Date
 }

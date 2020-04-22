@@ -7,19 +7,19 @@ import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser'
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './core/exceptions/http-exception.filter';
-import { configure, getLogger,connectLogger } from 'log4js';
-import {LoggingInterceptor} from './core/interceptor/logging.interceptor'
+import { configure, getLogger, connectLogger } from 'log4js';
+import { LoggingInterceptor } from './core/interceptor/logging.interceptor'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
-    AppModule,{
-      logger: false
-    }
+    AppModule, {
+    logger: false
+  }
   );
   // 全局异常捕获
   app.useGlobalFilters(new HttpExceptionFilter());
-  // app.useGlobalInterceptors(new LoggingInterceptor());
-  
+  app.useGlobalInterceptors(new LoggingInterceptor());
+
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   // 使用前端渲染引擎
@@ -51,8 +51,8 @@ async function bootstrap() {
   //     msg:'invalid csrf token'
   //   })
   // })
-  
-  
+
+
 
   await app.listen(3003);
 }
