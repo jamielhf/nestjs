@@ -18,7 +18,7 @@ export class AuthController {
    * @memberof AuthController
    */
   @Post('login')
-  async login(@Body() body: LoginDto, @Res() res, @Req() req) {
+  async login(@Body() body: LoginDto, ) {
     let result = await this.authService.login(body);
     return result;
   }

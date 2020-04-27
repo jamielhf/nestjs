@@ -12,18 +12,18 @@ export class LoggingInterceptor implements NestInterceptor {
     const request = ctx.getRequest();
     const url = request.originalUrl;
     const statusCode = response.statusCode;
-    requestLogger.info(`${url}-${statusCode}`,request.body);
+    requestLogger.info(`${url}-${statusCode}`, request.body);
     return next
       .handle()
       .pipe(
-        map(data=>{
+        map((data) => {
           const res = {
             code: 200,
-            msg: (data &&  data.msg) || 'success',
-            data: (data &&  data.data) || {},
+            msg: (data && data.msg) || 'success',
+            data: (data && data.data) || {},
           };
           requestLogger.info(`${url}-${statusCode}`, JSON.stringify(res));
-          response.json(res);
+          return res;
         })
       );
   }

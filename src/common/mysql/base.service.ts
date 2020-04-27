@@ -1,10 +1,11 @@
 import { Injectable, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { logger, errorLogger } from '../logger';
 
 @Injectable()
 export abstract class BaseService {
-  constructor() {}
+  constructor() { }
   repository;
   /**
    * 查找全部
@@ -13,7 +14,11 @@ export abstract class BaseService {
    * @memberof BaseService
    */
   async findAll(): Promise<any> {
-    return await this.repository.find();
+    try {
+      return await this.repository.find();
+    } catch (e) {
+      return null
+    }
   }
   /**
    *
@@ -23,8 +28,8 @@ export abstract class BaseService {
    * @returns {Promise<any>}
    * @memberof BaseService
    */
-  async update(query,update): Promise<any> {
-    return await this.repository.update(query,update);
+  async update(query, update): Promise<any> {
+    return await this.repository.update(query, update);
   }
   /**
    *
@@ -35,7 +40,12 @@ export abstract class BaseService {
    */
   @UseInterceptors(ClassSerializerInterceptor)
   async findOne(query): Promise<any> {
-    return await this.repository.findOne(query);
+    try {
+      return await this.repository.findOne(query);
+    } catch (e) {
+      errorLogger.log(e);
+      return null
+    }
   }
   /**
    *
@@ -46,10 +56,27 @@ export abstract class BaseService {
    */
   @UseInterceptors(ClassSerializerInterceptor)
   async find(query): Promise<any> {
-    return await this.repository.find(query);
+    try {
+      return await this.repository.find(query);
+    } catch (e) {
+      errorLogger.log(e);
+      return null
+    }
   }
 
-  async save(data):Promise<any> {
+  async save(data): Promise<any> {
     return await this.repository.save(data);
   }
+
+  /**
+   *
+   * 删除
+   * @param {*} query
+   * @returns {Promise<any>}
+   * @memberof BaseService
+   */
+  async delete(query): Promise<any> {
+    return await this.repository.delete(query);
+  }
+
 }

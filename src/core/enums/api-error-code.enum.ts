@@ -11,4 +11,5 @@ export enum ApiErrorCode {
     LOGIN_FAIL = 10006, // 登陆失败
     UPDATE_FAIL = 10007, // 更新信息失败
     CREATE_FAIL = 10008, // 新增信息失败
+    DATA_NO_EXIT = 10009, // 数据不存在
 }

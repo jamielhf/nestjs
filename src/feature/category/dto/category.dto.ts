@@ -11,3 +11,10 @@ export class CategorySaveDto {
   })
   readonly icon: string;
 }
+
+export class CategoryIdDto {
+  @IsNotEmpty({
+    message: '分类id不能为空',
+  })
+  readonly id: string;
+}

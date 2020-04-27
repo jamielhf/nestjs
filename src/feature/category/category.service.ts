@@ -7,6 +7,7 @@ import { ApiException } from '../../core/exceptions/api.exception';
 import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
 import { ICategory } from './interfaces/index';
 import { CategorySaveDto } from './dto/category.dto';
+import { logger, errorLogger } from 'src/common/logger';
 
 
 
@@ -38,8 +39,30 @@ export class CategoryService extends BaseService {
     } else {
       throw new ApiException('分类已存在', ApiErrorCode.CREATE_FAIL);
     }
-
-
-
+  }
+  async delete(id: string) {
+    const res = await this.repository.delete({ id });
+    if (+res.affected === 1) {
+      return {
+        msg: '删除成功'
+      }
+    } else {
+      throw new ApiException('分类不存在', ApiErrorCode.DATA_NO_EXIT);
+    }
+  }
+  async list(id?: string) {
+    let res = null;
+    if (id) {
+      res = await this.repository.findOne({ id })
+    } else {
+      res = await this.repository.find()
+    }
+    return {
+      data: res,
+    }
+  }
+  async update(id: string) {
+    const res = await this.repository.update({ id });
+    console.log(res);
   }
 }
