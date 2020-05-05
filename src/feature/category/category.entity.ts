@@ -37,6 +37,7 @@ export class Category {
   )
   tags: Array<Tag>;
 
+  @Exclude()
   @CreateDateColumn({
     type: 'datetime',
     comment: '创建时间',
@@ -44,10 +45,15 @@ export class Category {
   })
   createTime: Date
 
+  @Exclude()
   @UpdateDateColumn({
     type: 'datetime',
     comment: '更新时间',
-    name: 'update_time'
+    name: 'update_time',
   })
   updateTime: Date
+
+  constructor(partial: Partial<Category>) {
+    Object.assign(this, partial);
+  }
 }

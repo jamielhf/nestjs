@@ -18,3 +18,12 @@ export class CategoryIdDto {
   })
   readonly id: string;
 }
+
+export class CategoryUpdateDto {
+  @IsNotEmpty({
+    message: '分类id不能为空',
+  })
+  readonly id: string;
+  readonly icon?: string;
+  readonly title?: string;
+}

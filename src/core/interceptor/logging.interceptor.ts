@@ -2,6 +2,7 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nes
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { requestLogger } from '../../common/logger';
+import { classToPlain } from 'class-transformer';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -17,10 +18,16 @@ export class LoggingInterceptor implements NestInterceptor {
       .handle()
       .pipe(
         map((data) => {
+          let msg = 'success';
+          let obj = data;
+          if (data.msg) {
+            msg = data.msg;
+            obj = data.data;
+          }
           const res = {
             code: 200,
-            msg: (data && data.msg) || 'success',
-            data: (data && data.data) || {},
+            msg: data.msg || 'success',
+            data: classToPlain(obj) || {},
           };
           requestLogger.info(`${url}-${statusCode}`, JSON.stringify(res));
           return res;

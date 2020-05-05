@@ -1,7 +1,8 @@
 import { Controller, Post, Get, Body, Req, UseInterceptors, ClassSerializerInterceptor, Next, Query } from '@nestjs/common';
-import { CategorySaveDto, CategoryIdDto } from './dto/category.dto';
+import { CategorySaveDto, CategoryIdDto, CategoryUpdateDto } from './dto/category.dto';
 import { CategoryService } from './category.service';
-
+import { Category } from './category.entity';
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('api/category')
 export class CategoryController {
    constructor(
@@ -14,8 +15,11 @@ export class CategoryController {
    }
    // 更新分类
    @Post('update')
-   async updateCategory(@Body('id') body: CategoryIdDto) {
-      return await this.categoryService.update(body.id);
+   async updateCategory(@Body() body: CategoryUpdateDto) {
+      let { id, ...data } = body;
+      return await this.categoryService.update({
+         id,
+      }, data);
    }
    // 删除分类
    @Post('delete')
@@ -25,7 +29,7 @@ export class CategoryController {
 
    // 获取分类列表
    @Get('list')
-   async getCategoryList(@Query('id') id?: string) {
+   async getCategoryList(@Query('id') id?: string): Promise<Category[]> {
       return await this.categoryService.list(id);
    }
 

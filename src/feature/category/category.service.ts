@@ -24,10 +24,7 @@ export class CategoryService extends BaseService {
     const hasCategory = await this.repository.findOne({ title: data.title });
 
     if (!hasCategory) {
-      let category: ICategory = new Category();
-      category = {
-        ...data,
-      }
+      let category: ICategory = new Category(data);
       const res = await this.repository.save(category);
       if (res) {
         return {
@@ -55,14 +52,8 @@ export class CategoryService extends BaseService {
     if (id) {
       res = await this.repository.findOne({ id })
     } else {
-      res = await this.repository.find()
+      res = await this.repository.find();
     }
-    return {
-      data: res,
-    }
-  }
-  async update(id: string) {
-    const res = await this.repository.update({ id });
-    console.log(res);
+    return res
   }
 }

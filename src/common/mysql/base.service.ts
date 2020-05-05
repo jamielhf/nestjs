@@ -2,6 +2,8 @@ import { Injectable, ClassSerializerInterceptor, UseInterceptors } from '@nestjs
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { logger, errorLogger } from '../logger';
+import { ApiException } from '../../core/exceptions/api.exception';
+import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
 
 @Injectable()
 export abstract class BaseService {
@@ -29,7 +31,16 @@ export abstract class BaseService {
    * @memberof BaseService
    */
   async update(query, update): Promise<any> {
-    return await this.repository.update(query, update);
+    const res = await this.repository.update(query, update);
+    console.log(res);
+    if (+res.raw.changedRows === 1) {
+      return {
+        msg: '更新成功'
+      }
+    } else {
+      throw new ApiException('更新失败', ApiErrorCode.DATA_NO_EXIT);
+    }
+
   }
   /**
    *
@@ -54,7 +65,6 @@ export abstract class BaseService {
    * @returns {Promise<any>}
    * @memberof BaseService
    */
-  @UseInterceptors(ClassSerializerInterceptor)
   async find(query): Promise<any> {
     try {
       return await this.repository.find(query);
