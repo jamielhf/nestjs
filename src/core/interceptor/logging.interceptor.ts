@@ -13,7 +13,6 @@ export class LoggingInterceptor implements NestInterceptor {
     const request = ctx.getRequest();
     const url = request.originalUrl;
     const statusCode = response.statusCode;
-    requestLogger.info(`${url}-${statusCode}`, request.body);
     return next
       .handle()
       .pipe(
@@ -29,7 +28,7 @@ export class LoggingInterceptor implements NestInterceptor {
             msg: data.msg || 'success',
             data: classToPlain(obj) || {},
           };
-          requestLogger.info(`${url}-${statusCode}`, JSON.stringify(res));
+          requestLogger.info(`${url}-${statusCode}`, `req:${JSON.stringify(request.body)}`, `res:${JSON.stringify(res)}`);
           return res;
         })
       );

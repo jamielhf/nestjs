@@ -16,6 +16,7 @@ async function bootstrap() {
     logger: false
   }
   );
+  console.log(22);
   // 全局异常捕获
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new LoggingInterceptor());
@@ -51,8 +52,6 @@ async function bootstrap() {
   //     msg:'invalid csrf token'
   //   })
   // })
-
-
 
   await app.listen(3003);
 }

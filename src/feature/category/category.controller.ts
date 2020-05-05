@@ -24,7 +24,7 @@ export class CategoryController {
    // 删除分类
    @Post('delete')
    async deleteCategory(@Body() body: CategoryIdDto) {
-      return await this.categoryService.delete(body.id);
+      return await this.categoryService.delete({ id: body.id });
    }
 
    // 获取分类列表

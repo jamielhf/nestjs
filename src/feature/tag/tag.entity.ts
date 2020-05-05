@@ -7,10 +7,12 @@ import {
   UpdateDateColumn,
   ManyToMany,
   ManyToOne,
-  OneToMany
+  OneToMany,
+  JoinTable
 } from 'typeorm';
 import { Article } from '../article/article.entity';
 import { Category } from '../category/category.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Tag {
@@ -25,16 +27,19 @@ export class Tag {
 
   @OneToMany(
     () => Article,
-    article => article.tags
+    article => article.tags,
   )
-  articles: Article;
+  articles: Array<Article>;
 
   @ManyToOne(
     () => Category,
     category => category.tags,
+    { cascade: true }
   )
+  @JoinTable()
   category: Category;
 
+  @Exclude()
   @CreateDateColumn({
     type: 'datetime',
     comment: '创建时间',
@@ -42,10 +47,15 @@ export class Tag {
   })
   createTime: Date
 
+  @Exclude()
   @UpdateDateColumn({
     type: 'datetime',
     comment: '更新时间',
     name: 'update_time'
   })
   updateTime: Date
+
+  constructor(partial: Partial<Tag>) {
+    Object.assign(this, partial);
+  }
 }

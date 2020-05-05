@@ -25,7 +25,7 @@ import { ViewModule } from './view/view.module';
     UsersModule,
     AuthModule,
     ArticleModule,
-    CategoryModule,
+    ViewModule,
   ],
 })
 export class FeatureModule { }

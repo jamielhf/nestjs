@@ -32,7 +32,6 @@ export abstract class BaseService {
    */
   async update(query, update): Promise<any> {
     const res = await this.repository.update(query, update);
-    console.log(res);
     if (+res.raw.changedRows === 1) {
       return {
         msg: '更新成功'
@@ -86,7 +85,14 @@ export abstract class BaseService {
    * @memberof BaseService
    */
   async delete(query): Promise<any> {
-    return await this.repository.delete(query);
+    const res = await this.repository.delete(query);
+    if (+res.affected === 1) {
+      return {
+        msg: '删除成功'
+      }
+    } else {
+      throw new ApiException('删除失败，内容不存在', ApiErrorCode.DATA_NO_EXIT);
+    }
   }
 
 }

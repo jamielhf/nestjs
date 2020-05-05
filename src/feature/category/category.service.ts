@@ -37,22 +37,20 @@ export class CategoryService extends BaseService {
       throw new ApiException('分类已存在', ApiErrorCode.CREATE_FAIL);
     }
   }
-  async delete(id: string) {
-    const res = await this.repository.delete({ id });
-    if (+res.affected === 1) {
-      return {
-        msg: '删除成功'
-      }
-    } else {
-      throw new ApiException('分类不存在', ApiErrorCode.DATA_NO_EXIT);
-    }
-  }
   async list(id?: string) {
     let res = null;
     if (id) {
-      res = await this.repository.findOne({ id })
+      console.log(id);
+      res = await this.repository.find({
+        where: {
+          id
+        }, relations: ["tags"]
+      });
+      if (!res) {
+        return []
+      }
     } else {
-      res = await this.repository.find();
+      res = await this.repository.find({ relations: ["tags"] });
     }
     return res
   }
