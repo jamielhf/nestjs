@@ -24,7 +24,6 @@ import { ViewModule } from './view/view.module';
   exports: [
     UsersModule,
     AuthModule,
-    ArticleModule,
     ViewModule,
   ],
 })

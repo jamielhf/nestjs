@@ -10,6 +10,7 @@ import { SECRET } from '../../config/app'
 import { RedisService } from '../../core/redis/redis.service';
 import { GitHubProfile } from './github.strategy';
 import { logger, errorLogger } from '../../common/logger';
+import { Users } from '../users/users.entity';
 
 
 @Injectable()
@@ -26,7 +27,7 @@ export class AuthService {
    * @param password 
    */
   async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne({ username });
+    const user = await this.usersService.findOne<Users>({ username });
     if (user && user.password === md5(password)) {
       const { password, ...result } = user;
       return result;
@@ -40,7 +41,7 @@ export class AuthService {
    */
   async login(data) {
     const { username, password } = data;
-    let user = await this.usersService.findOne({ username });
+    let user = await this.usersService.findOne<Users>({ username });
     if (!user) {
       throw new ApiException('不存在用户', ApiErrorCode.LOGIN_FAIL);
     }
@@ -89,11 +90,11 @@ export class AuthService {
    */
   async register(data: ResgisterDto) {
     const { username, email } = data;
-    let exitUsername = await this.usersService.findOne({ username });
+    let exitUsername = await this.usersService.findOne<Users>({ username });
     if (exitUsername) {
       throw new ApiException('用户名已存在', ApiErrorCode.USERNAME_INVALID);
     } else {
-      let exitEmail = await this.usersService.findOne({ email });
+      let exitEmail = await this.usersService.findOne<Users>({ email });
       if (exitEmail) {
         throw new ApiException('邮箱已存在', ApiErrorCode.EMAIL_INVALID);
       }
@@ -151,7 +152,7 @@ export class AuthService {
     if (!email) {
       throw new ApiException('邮箱验证失败,token失效', ApiErrorCode.TOKEN_INVALID);
     }
-    const user = await this.usersService.findOne({ email });
+    const user = await this.usersService.findOne<Users>({ email });
     if (user) {
       logger.info('验证token', diffEncryptMD5(user.email + user.id + SECRET, body.token));
       // 对比key是否正确
@@ -184,7 +185,7 @@ export class AuthService {
    * @memberof AuthService
    */
   async forgetPassword(body: ForgetPasswordDto) {
-    const user = await this.usersService.findOne({ email: body.email });
+    const user = await this.usersService.findOne<Users>({ email: body.email });
     if (!user) {
       throw new ApiException('邮件未注册', ApiErrorCode.USER_NO_EXIT);
     } else {
@@ -216,7 +217,7 @@ export class AuthService {
     // 获取用户的邮箱
     const email = profile.emails && profile.emails[0] && profile.emails[0].value;
     // 根据 githubId 查找用户
-    let existUser = await this.usersService.findOne({ githubId: profile.id });
+    let existUser = await this.usersService.findOne<Users>({ githubId: profile.id });
     // 用户不存在则创建
     if (!existUser) {
       let user = {
@@ -277,7 +278,7 @@ export class AuthService {
   async activeRegister(data: ActiveRegisterDto) {
     const { username, key } = data;
 
-    let user = await this.usersService.findOne({ username });
+    let user = await this.usersService.findOne<Users>({ username });
     if (!user) {
       throw new ApiException('用户不存在', ApiErrorCode.USER_NO_EXIT);
     }

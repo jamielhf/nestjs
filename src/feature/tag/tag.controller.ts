@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, UseInterceptors, ClassSerializerInterceptor, Query } from '@nestjs/common';
 import { TagService } from './tag.services';
-import { TagSaveDto, TagIdDto } from './dto/tag.dto';
+import { TagSaveDto, TagIdDto, TagUpdateDto } from './dto/tag.dto';
 import { Tag } from './tag.entity';
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('api/tag')
@@ -17,8 +17,11 @@ export class TagController {
   }
   // 更新tag
   @Post('update')
-  async updateTag() {
-
+  async updateTag(@Body() body: TagUpdateDto) {
+    let { id, ...data } = body;
+    return await this.tagService.update({
+      id,
+    }, data);
   }
   // 删除tag
   @Post('delete')

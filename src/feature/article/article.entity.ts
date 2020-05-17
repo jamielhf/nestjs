@@ -1,18 +1,20 @@
 
-import { 
-  Entity, 
-  Column, 
-  PrimaryGeneratedColumn, 
-  CreateDateColumn, 
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany, 
+  ManyToMany,
   JoinTable,
   OneToOne,
   JoinColumn,
-  ManyToOne} from 'typeorm';
-import {Tag} from '../tag/tag.entity'
-import {Category} from '../category/category.entity'
-import {Users} from '../users/users.entity'
+  ManyToOne
+} from 'typeorm';
+import { Tag } from '../tag/tag.entity'
+import { Category } from '../category/category.entity'
+import { Users } from '../users/users.entity'
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Article {
@@ -20,13 +22,25 @@ export class Article {
   id: string;
 
   @Column({
-    type:'text',
-   })
+    type: 'text',
+    nullable: true,
+  })
   content: string;
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  markdown: string;
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  html: string;
 
   @Column({
     length: 100,
-   })
+    nullable: true,
+  })
   title: string
 
   @ManyToOne(
@@ -35,29 +49,45 @@ export class Article {
     { cascade: true }
   )
   @JoinTable()
-  tags:Tag;
+  tags: Tag;
 
   @ManyToOne(
     () => Category,
     category => category.articles,
-    { cascade: true }
+    { cascade: true } // 自动保存关系着的对象
   )
   @JoinTable()
   category: Category;
 
-  @OneToOne(type => Users)
-  @JoinColumn()
-  user: Users;
+  @Column({
+    type: 'text',
+  })
+  userId: string;
 
+  @Column('simple-enum', { enum: ['draft', 'publish'] })
+  status: string; // 文章状态
+
+
+  @Column({ type: 'int', default: 0 })
+  views: number; // 阅读量
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: true, })
+  publishAt: Date; // 发布日期
+
+  @Exclude()
   @CreateDateColumn({
     type: 'datetime',
     comment: '创建时间',
   })
-  create_time:Date
+  create_time: Date
 
+  @Exclude()
   @UpdateDateColumn({
     type: 'datetime',
     comment: '更新时间',
   })
-  update_time:Date
+  update_time: Date
+  constructor(partial: Partial<Article>) {
+    Object.assign(this, partial);
+  }
 }

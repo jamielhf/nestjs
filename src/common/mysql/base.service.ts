@@ -19,6 +19,7 @@ export abstract class BaseService {
     try {
       return await this.repository.find();
     } catch (e) {
+      errorLogger.error(e);
       return null
     }
   }
@@ -31,14 +32,20 @@ export abstract class BaseService {
    * @memberof BaseService
    */
   async update(query, update): Promise<any> {
-    const res = await this.repository.update(query, update);
-    if (+res.raw.changedRows === 1) {
-      return {
-        msg: '更新成功'
+    try {
+      const res = await this.repository.update(query, update);
+      if (+res.raw.changedRows === 1) {
+        return {
+          msg: '更新成功'
+        }
+      } else {
+        throw new ApiException('更新失败', ApiErrorCode.DATA_NO_EXIT);
       }
-    } else {
-      throw new ApiException('更新失败', ApiErrorCode.DATA_NO_EXIT);
+    } catch (e) {
+      errorLogger.error(e);
+      return null
     }
+
 
   }
   /**
@@ -49,11 +56,11 @@ export abstract class BaseService {
    * @memberof BaseService
    */
   @UseInterceptors(ClassSerializerInterceptor)
-  async findOne(query): Promise<any> {
+  async findOne<T>(query): Promise<T> {
     try {
       return await this.repository.findOne(query);
     } catch (e) {
-      errorLogger.log(e);
+      errorLogger.error(e);
       return null
     }
   }
@@ -68,31 +75,46 @@ export abstract class BaseService {
     try {
       return await this.repository.find(query);
     } catch (e) {
-      errorLogger.log(e);
+      errorLogger.error(e);
       return null
     }
   }
 
   async save(data): Promise<any> {
-    return await this.repository.save(data);
+    console.log(111, data);
+    try {
+      return await this.repository.save(data);
+    } catch (e) {
+      console.log(222, e);
+      errorLogger.error(e);
+      return null
+    }
+
   }
+
 
   /**
    *
    * 删除
    * @param {*} query
-   * @returns {Promise<any>}
+   * @returns {Promise<{msg: string}>}
    * @memberof BaseService
    */
-  async delete(query): Promise<any> {
-    const res = await this.repository.delete(query);
-    if (+res.affected === 1) {
-      return {
-        msg: '删除成功'
+  async delete(query): Promise<{ msg: string }> {
+    try {
+      const res = await this.repository.delete(query);
+      if (+res.affected === 1) {
+        return {
+          msg: '删除成功'
+        }
+      } else {
+        throw new ApiException('删除失败，内容不存在', ApiErrorCode.DATA_NO_EXIT);
       }
-    } else {
-      throw new ApiException('删除失败，内容不存在', ApiErrorCode.DATA_NO_EXIT);
+    } catch (e) {
+      errorLogger.error(e);
+      return null
     }
+
   }
 
 }

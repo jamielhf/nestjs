@@ -50,7 +50,7 @@ export class CategoryService extends BaseService {
         return []
       }
     } else {
-      res = await this.repository.find({ relations: ["tags"] });
+      res = await this.repository.find({});
     }
     return res
   }

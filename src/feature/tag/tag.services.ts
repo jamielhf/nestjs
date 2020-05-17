@@ -7,6 +7,7 @@ import { ApiErrorCode } from "../../core/enums/api-error-code.enum";
 import { CategoryService } from "../category/category.service";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Category } from "../category/category.entity";
 
 @Injectable()
 export class TagService extends BaseService {
@@ -19,7 +20,7 @@ export class TagService extends BaseService {
     this.repository = this.tagRepository;
   }
   async save(data: TagSaveDto) {
-    const hasCategory = await this.categoryService.findOne({ id: data.category });
+    const hasCategory = await this.categoryService.findOne<Category>({ id: data.category });
     if (!hasCategory) {
       throw new ApiException('分类不存在', ApiErrorCode.DATA_NO_EXIT);
     }

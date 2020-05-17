@@ -10,6 +10,7 @@ import { CategoryModule } from '../category/category.module';
     CategoryModule,
   ],
   controllers: [TagController],
-  providers: [TagService]
+  providers: [TagService],
+  exports: [TagService]
 })
 export class TagModule { }

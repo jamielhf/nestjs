@@ -1,10 +1,11 @@
-import { ExtractJwt, Strategy,VerifiedCallback } from 'passport-jwt';
+import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException, ExecutionContext } from '@nestjs/common';
 import { jwtConstants } from './constants';
 import { UsersService } from '../users/users.service';
 import { md5 } from 'utility';
 import { RedisService } from '../../core/redis/redis.service';
+import { Users } from '../users/users.entity';
 
 
 
@@ -21,14 +22,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
   async validate(payload: any) {
-    console.log('payload',payload)
-    const {username,} = payload;
-    const user = await this.usersService.findOne({username});
-    
+    console.log('payload', payload)
+    const { username, } = payload;
+    const user = await this.usersService.findOne<Users>({ username });
+
     if (user) {
       // token是否在redis中 没有则不在登陆状态
       const token = await this.redisService.get(user.id);
-      if(!token) {
+      if (!token) {
         throw new UnauthorizedException();
       }
       const { password, ...result } = user;

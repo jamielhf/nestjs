@@ -1,18 +1,22 @@
-/*
- * @Author: your name
- * @Date: 2019-12-02 15:03:49
- * @LastEditTime : 2019-12-23 17:06:38
- * @LastEditors  : Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \nestjs\src\feature\article\article.module.ts
- */
+
 import { Module } from '@nestjs/common';
 import { ArticleController } from './article.controller';
 import { ArticleService } from './article.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Article } from './article.entity';
+import { CategoryModule } from '../category/category.module';
+import { TagModule } from '../tag/tag.module';
+import { UsersModule } from '../users/users.module';
 
 @Module({
+  imports: [
+    TypeOrmModule.forFeature([Article]),
+    CategoryModule,
+    TagModule,
+    UsersModule
+  ],
   controllers: [ArticleController],
   providers: [ArticleService],
-  exports:[ArticleService]
+  exports: [ArticleService]
 })
-export class ArticleModule {}
+export class ArticleModule { }
