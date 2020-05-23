@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseInterceptors, ClassSerializerInterceptor, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseInterceptors, ClassSerializerInterceptor, Query, Put, Param, Delete } from '@nestjs/common';
 import { TagService } from './tag.services';
 import { TagSaveDto, TagIdDto, TagUpdateDto } from './dto/tag.dto';
 import { Tag } from './tag.entity';
@@ -11,29 +11,32 @@ export class TagController {
 
   }
   // 保存tag
-  @Post('save')
+  @Post()
   async saveTag(@Body() body: TagSaveDto) {
     return await this.tagService.save(body);
   }
   // 更新tag
-  @Post('update')
-  async updateTag(@Body() body: TagUpdateDto) {
-    let { id, ...data } = body;
+  @Put(':id')
+  async updateTag(@Param('id') id, @Body() body: Partial<TagUpdateDto>) {
+    let { ...data } = body;
     return await this.tagService.update({
       id,
     }, data);
   }
   // 删除tag
-  @Post('delete')
-  async deleteTag(@Body() body: TagIdDto) {
-    return await this.tagService.delete({ id: body.id });
+  @Delete(':id')
+  async deleteTag(@Param('id') id) {
+    return await this.tagService.delete({ id });
   }
 
   // 获取tag列表
-  @Get('list')
-  async getTagList(@Query('id') id?: string): Promise<Tag[]> {
-    return await this.tagService.list(id);
-
+  @Get()
+  async getTagList(): Promise<Tag[]> {
+    return await this.tagService.list();
   }
-
+  // 获取单个tag
+  @Get(':id')
+  async getTag(@Param('id') id?: string): Promise<Tag[]> {
+    return await this.tagService.list(id);
+  }
 }

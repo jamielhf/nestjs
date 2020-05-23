@@ -22,10 +22,6 @@ export class TagIdDto {
 }
 
 export class TagUpdateDto {
-  @IsNotEmpty({
-    message: '标签id不能为空',
-  })
-  readonly id: string;
   readonly icon?: string;
   readonly title?: string;
 }

@@ -17,9 +17,16 @@ export class TagService extends BaseService {
     private readonly categoryService: CategoryService
   ) {
     super();
-    this.repository = this.tagRepository;
   }
-  async save(data: TagSaveDto) {
+  repository: Repository<Tag> = this.tagRepository;
+  /**
+   *
+   * 保存标签
+   * @param {TagSaveDto} data
+   * @returns {Promise<Tag>}
+   * @memberof TagService
+   */
+  async save(data: TagSaveDto): Promise<Tag> {
     const hasCategory = await this.categoryService.findOne<Category>({ id: data.category });
     if (!hasCategory) {
       throw new ApiException('分类不存在', ApiErrorCode.DATA_NO_EXIT);
@@ -32,9 +39,7 @@ export class TagService extends BaseService {
       });
       const res = await this.repository.save(tag);
       if (res) {
-        return {
-          data: res
-        }
+        return res
       } else {
         throw new ApiException('更新失败', ApiErrorCode.TIMEOUT);
       }
@@ -42,7 +47,14 @@ export class TagService extends BaseService {
       throw new ApiException('标签已存在', ApiErrorCode.CREATE_FAIL);
     }
   }
-  async list(id?: string) {
+  /**
+   *
+   * 获取标签列表
+   * @param {string} [id]
+   * @returns {Promise<Tag[]>}
+   * @memberof TagService
+   */
+  async list(id?: string): Promise<Tag[]> {
     if (id) {
       return await this.repository.find({
         where: {

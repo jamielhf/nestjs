@@ -27,7 +27,7 @@ export class Tag {
 
   @OneToMany(
     () => Article,
-    article => article.tags,
+    article => article.tag,
   )
   articles: Array<Article>;
 
