@@ -18,18 +18,24 @@ export class CategoryService extends BaseService {
     private readonly categoryRepository: Repository<Category>,
   ) {
     super();
-    this.repository = this.categoryRepository;
+
   }
-  async save(data: CategorySaveDto) {
-    const hasCategory = await this.repository.findOne({ title: data.title });
+  public repository: Repository<Category> = this.categoryRepository;
+  /**
+   *
+   * 保存分类
+   * @param {CategorySaveDto} data
+   * @returns {Promise<Category>}
+   * @memberof CategoryService
+   */
+  async save(data: Partial<Category>): Promise<Category> {
+    const hasCategory = await this.repository.findOne({ where: { title: data.title } });
 
     if (!hasCategory) {
-      let category: ICategory = new Category(data);
+      let category = new Category(data);
       const res = await this.repository.save(category);
       if (res) {
-        return {
-          data: res
-        }
+        return res
       } else {
         throw new ApiException('更新失败', ApiErrorCode.TIMEOUT);
       }
@@ -37,20 +43,26 @@ export class CategoryService extends BaseService {
       throw new ApiException('分类已存在', ApiErrorCode.CREATE_FAIL);
     }
   }
-  async list(id?: string) {
+  /**
+   *
+   * 获取列表 或者单个详情
+   * @param {string} [id]
+   * @returns {(Promise<Category | Category[] | string>)}
+   * @memberof CategoryService
+   */
+  async list(id?: string): Promise<Category | Category[] | string> {
     let res = null;
     if (id) {
-      console.log(id);
-      res = await this.repository.find({
+      res = await this.repository.findOne({
         where: {
           id
         }, relations: ["tags"]
       });
       if (!res) {
-        return []
+        return ''
       }
     } else {
-      res = await this.repository.find({});
+      res = await this.repository.find();
     }
     return res
   }
