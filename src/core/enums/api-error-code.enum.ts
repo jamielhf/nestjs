@@ -12,4 +12,5 @@ export enum ApiErrorCode {
     UPDATE_FAIL = 10007, // 更新信息失败
     CREATE_FAIL = 10008, // 新增信息失败
     DATA_NO_EXIT = 10009, // 数据不存在
+    NO_AUTHORIZATION = 10010, // 没有权限
 }

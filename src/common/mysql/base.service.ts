@@ -8,7 +8,7 @@ import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
 @Injectable()
 export abstract class BaseService {
   constructor() { }
-  repository;
+  public repository: Repository<any>
   /**
    * 查找全部
    *
@@ -32,19 +32,21 @@ export abstract class BaseService {
    * @memberof BaseService
    */
   async update(query, update): Promise<any> {
+    let res;
     try {
-      const res = await this.repository.update(query, update);
-      if (+res.raw.changedRows === 1) {
-        return {
-          msg: '更新成功'
-        }
-      } else {
-        throw new ApiException('更新失败', ApiErrorCode.DATA_NO_EXIT);
-      }
+      res = await this.repository.update(query, update);
     } catch (e) {
       errorLogger.error(e);
       return null
     }
+    if (+res.raw.changedRows === 1) {
+      return {
+        msg: '更新成功'
+      }
+    } else {
+      throw new ApiException('更新失败', ApiErrorCode.DATA_NO_EXIT);
+    }
+
 
 
   }
@@ -55,8 +57,7 @@ export abstract class BaseService {
    * @returns {Promise<any>}
    * @memberof BaseService
    */
-  @UseInterceptors(ClassSerializerInterceptor)
-  async findOne<T>(query): Promise<T> {
+  async findOne<T>(query): Promise<T | undefined> {
     try {
       return await this.repository.findOne(query);
     } catch (e) {
@@ -71,7 +72,7 @@ export abstract class BaseService {
    * @returns {Promise<any>}
    * @memberof BaseService
    */
-  async find(query): Promise<any> {
+  async find<T>(query): Promise<T[] | undefined> {
     try {
       return await this.repository.find(query);
     } catch (e) {
@@ -81,11 +82,9 @@ export abstract class BaseService {
   }
 
   async save(data): Promise<any> {
-    console.log(111, data);
     try {
       return await this.repository.save(data);
     } catch (e) {
-      console.log(222, e);
       errorLogger.error(e);
       return null
     }
@@ -101,19 +100,21 @@ export abstract class BaseService {
    * @memberof BaseService
    */
   async delete(query): Promise<{ msg: string }> {
+    let res
     try {
-      const res = await this.repository.delete(query);
-      if (+res.affected === 1) {
-        return {
-          msg: '删除成功'
-        }
-      } else {
-        throw new ApiException('删除失败，内容不存在', ApiErrorCode.DATA_NO_EXIT);
-      }
+      res = await this.repository.delete(query);
     } catch (e) {
       errorLogger.error(e);
       return null
     }
+    if (+res.affected === 1) {
+      return {
+        msg: '删除成功'
+      }
+    } else {
+      throw new ApiException('删除失败，内容不存在', ApiErrorCode.DATA_NO_EXIT);
+    }
+
 
   }
 

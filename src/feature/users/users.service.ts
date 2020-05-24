@@ -12,8 +12,8 @@ export class UsersService extends BaseService {
     private readonly usersRepository: Repository<Users>,
   ) {
     super();
-    this.repository = this.usersRepository;
   }
+  public repository: Repository<Users> = this.usersRepository;
   create(data) {
     let user = new Users();
     user = {
@@ -29,12 +29,12 @@ export class UsersService extends BaseService {
    * @returns
    * @memberof UsersService
    */
-  async updateUserInfo(data,userId) {
+  async updateUserInfo(data, userId) {
     try {
-      const res = await this.repository.update(userId,{
+      const res = await this.repository.update(userId, {
         [data.field]: data.value
       })
-      if(res) {
+      if (res) {
         return {
           msg: '更新成功'
         }
@@ -45,6 +45,6 @@ export class UsersService extends BaseService {
         msg: '更新失败'
       }
     }
-    
+
   }
 }

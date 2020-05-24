@@ -9,3 +9,11 @@ export interface ITags {
   updateTime: string,
   category: Category
 }
+export interface ITags {
+  id: string,
+  title: string,
+  icon: string,
+  createTime: string,
+  updateTime: string,
+  category: Category
+}
