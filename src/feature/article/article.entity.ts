@@ -49,7 +49,7 @@ export class Article {
     { cascade: true }
   )
   @JoinTable()
-  tags: Tag;
+  tag: Tag;
 
   @ManyToOne(
     () => Category,

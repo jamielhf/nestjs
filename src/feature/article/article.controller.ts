@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, UseGuards, Query, Delete, Param, Put } from '@nestjs/common';
 import { createBody } from './interface';
 import { AuthGuard } from '@nestjs/passport';
 import { ArticleService } from './article.service';
+import { updateBody } from './dto/article.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/article')
@@ -9,29 +10,50 @@ export class ArticleController {
   constructor(readonly articleServive: ArticleService) {
 
   }
-  // 获取文章列表
-  @Get('list')
-  getArticleList() {
-    return {
-      a: 1
-    }
+  // 获取标签文章列表
+  @Get('tag/:id')
+  async getArticleListByTag(@Param('id') id) {
+    return await this.articleServive.list('tagId', id);
+  }
+  // 获取分类文章列表
+  @Get('category/:id')
+  async getArticleListByCategory(@Param('id') id) {
+    return await this.articleServive.list('categoryId', id);
+  }
+  // 获取某个用户文章列表
+  @Get('user/:id')
+  async getArticleListByUser(@Param('id') id) {
+    return await this.articleServive.list('userId', id);
+  }
+  @Get('user')
+  async getArticleListByUserSelf(@Req() req) {
+    return await this.articleServive.userArticle(req.user.id)
   }
   // 获取文章详情
-  @Get('detail')
-  getArticleDetail() {
+  @Get(':id')
+  async getArticleDetail(@Param('id') id) {
 
   }
+  // 获取文章详情
+  @Get()
+  async getAllArticle() {
+    return await this.articleServive.find({
+      where: {
+        status: 'publish'
+      }
+    });
+  }
   // 创建文章
-  @Post('create')
+  @Post()
   async createArticle(@Body() body: createBody, @Req() req) {
 
     body.userId = req.user.id;
     return await this.articleServive.create(body);
   }
-  // 保存文章
-  @Post('update')
-  updateArticle(@Body() body) {
-
+  // 更新文章
+  @Put(':id')
+  async updateArticle(@Param('id') id, @Body() body: Partial<updateBody>, @Req() req) {
+    return await this.articleServive.updateArticle(id, body, req.user.id);
   }
   // 发布文章
   @Post('publish')
@@ -39,8 +61,8 @@ export class ArticleController {
 
   }
   // 删除文章
-  @Post('delete')
-  deleteArticle() {
+  @Delete(':id')
+  deleteArticle(@Param('id') id) {
 
   }
 }
