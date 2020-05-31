@@ -25,14 +25,15 @@ export class ArticleController {
   async getArticleListByUser(@Param('id') id) {
     return await this.articleServive.list('userId', id);
   }
+  // 获取自己的文章列表
   @Get('user')
   async getArticleListByUserSelf(@Req() req) {
     return await this.articleServive.userArticle(req.user.id)
   }
-  // 获取文章详情
+  // 获取某篇文章
   @Get(':id')
-  async getArticleDetail(@Param('id') id) {
-
+  async getArticleDetail(@Param('id') id, @Req() req) {
+    return await this.articleServive.getArtile(id, req.user.id)
   }
   // 获取文章详情
   @Get()
@@ -52,17 +53,12 @@ export class ArticleController {
   }
   // 更新文章
   @Put(':id')
-  async updateArticle(@Param('id') id, @Body() body: Partial<updateBody>, @Req() req) {
+  async updateArticle(@Param('id') id, @Body() body: updateBody, @Req() req) {
     return await this.articleServive.updateArticle(id, body, req.user.id);
-  }
-  // 发布文章
-  @Post('publish')
-  publishArticle() {
-
   }
   // 删除文章
   @Delete(':id')
-  deleteArticle(@Param('id') id) {
-
+  async deleteArticle(@Param('id') id, @Req() req) {
+    return await this.articleServive.deleteArticle(id, req.user.id)
   }
 }

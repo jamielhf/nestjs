@@ -27,8 +27,8 @@ async function bootstrap() {
   // 注册并配置全局验证管道
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
-    whitelist: false, // 白名单
-    forbidNonWhitelisted: true, // 出现非白名单属性时停止处理请求，并向用户返回错误响应
+    whitelist: true, // 白名单
+    forbidNonWhitelisted: false, // 出现非白名单属性时停止处理请求，并向用户返回错误响应
     skipMissingProperties: false,
     forbidUnknownValues: true,
   }));
