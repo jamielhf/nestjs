@@ -9,13 +9,19 @@ import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './core/exceptions/http-exception.filter';
 import { configure, getLogger, connectLogger } from 'log4js';
 import { LoggingInterceptor } from './core/interceptor/logging.interceptor'
-
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(
-    AppModule, {
-    logger: false
+  let app;
+  try {
+    app = await NestFactory.create<NestExpressApplication>(
+      AppModule, {
+      logger: false
+    }
+    );
+  } catch (error) {
+    console.log(error);
   }
-  );
+  // 允许跨越
+  app.enableCors();
   // 全局异常捕获
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new LoggingInterceptor());
@@ -51,7 +57,6 @@ async function bootstrap() {
   //     msg:'invalid csrf token'
   //   })
   // })
-
   await app.listen(3003);
 }
 bootstrap();

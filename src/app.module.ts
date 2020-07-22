@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, RequestMethod,CacheModule} from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod, CacheModule } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { FeatureModule } from './feature/feature.module';
@@ -12,8 +12,8 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     CoreModule,
     CommonModule,
   ],
-  controllers:[AppController],
-  providers: [AppService,LoggerMiddleware],
+  controllers: [AppController],
+  providers: [AppService, LoggerMiddleware],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
