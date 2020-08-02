@@ -9,6 +9,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './core/exceptions/http-exception.filter';
 import { configure, getLogger, connectLogger } from 'log4js';
 import { LoggingInterceptor } from './core/interceptor/logging.interceptor'
+import { COOKIE_SECRET, DOMAIN_LIST } from './config/app';
+import { Response, Request } from 'express';
 async function bootstrap() {
   let app;
   try {
@@ -20,8 +22,20 @@ async function bootstrap() {
   } catch (error) {
     console.log(error);
   }
+  // 允许跨域的域名
+  const allowlist = DOMAIN_LIST;
+  const corsOptionsDelegate = (req: Request, callback) => {
+    console.log(req.header('Origin'));
+    var corsOptions;
+    if (allowlist.indexOf(req.header('Origin')) !== -1) {
+      corsOptions = { origin: true, credentials: true } // reflect (enable) the requested origin in the CORS response
+    } else {
+      corsOptions = { origin: false } // disable CORS for this request
+    }
+    callback(null, corsOptions) // callback expects two
+  }
   // 允许跨越
-  app.enableCors();
+  app.enableCors(corsOptionsDelegate);
   // 全局异常捕获
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new LoggingInterceptor());
@@ -46,7 +60,7 @@ async function bootstrap() {
   //   })
   // );
   // csrf
-  app.use(cookieParser())
+  app.use(cookieParser(COOKIE_SECRET))
   // app.use(csurf({ cookie: true }));
   // app.use((err,req, res, next) => {
   //   if (err.code !== 'EBADCSRFTOKEN') return next(err);

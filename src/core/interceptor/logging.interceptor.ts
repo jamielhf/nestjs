@@ -17,6 +17,7 @@ export class LoggingInterceptor implements NestInterceptor {
       .handle()
       .pipe(
         map((data) => {
+          console.log('after...');
           let msg = 'success';
           let obj = data;
           if (data.msg) {
@@ -29,7 +30,7 @@ export class LoggingInterceptor implements NestInterceptor {
             data: classToPlain(obj) || {},
           };
           requestLogger.info(`${url}-${statusCode}`, `req:${JSON.stringify(request.body)}`, `res:${JSON.stringify(res)}`);
-          return res;
+          response.json(res)
         })
       );
   }

@@ -39,7 +39,7 @@ export class AuthService {
    * 登陆成功后返回token
    * @param data 
    */
-  async login(data) {
+  async login(data, res) {
     const { username, password } = data;
     let user = await this.usersService.findOne<Users>({ username });
     if (!user) {
@@ -54,12 +54,15 @@ export class AuthService {
     }
     const payload = { username: user.username, sub: user.id, role: user.role };
     let token;
+    // 缓存到redis
     try {
       token = this.jwtService.sign(payload);
       await this.redisService.set(user.id, token, 12 * 3600);
     } catch (e) {
       errorLogger.log(e)
     }
+    // 写token 到 cookie 方便ssr
+    res.cookie('token', token, { domain: '.huya.com', path: '/', signed: true, maxAge: 24 * 3600 * 1000, httpOnly: true });
 
     return {
       data: token,

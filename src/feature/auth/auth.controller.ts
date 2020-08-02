@@ -3,6 +3,7 @@ import { Controller, Get, Render, Param, Req, Post, Res, UseGuards, Query, Body,
 import { AuthService } from './auth.service';
 import { LoginDto, ResgisterDto, ActiveRegisterDto, ResetPwdDto, ForgetPasswordDto, SetPasswordDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { Response, Request } from 'express';
 
 
 @Controller('api/auth')
@@ -18,8 +19,9 @@ export class AuthController {
    * @memberof AuthController
    */
   @Post('login')
-  async login(@Body() body: LoginDto, ) {
-    let result = await this.authService.login(body);
+  async login(@Body() body: LoginDto, @Res() res: Response, @Req() req: Request) {
+
+    let result = await this.authService.login(body, res);
     return result;
   }
 
