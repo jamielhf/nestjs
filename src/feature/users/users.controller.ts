@@ -22,12 +22,10 @@ export class UserController {
   async getInfo(@Body() body, @Req() req) {
     let userId = body.userId || req.user.id;
     if (userId) {
-      const { password, ...data } = await this.userService.findOne({
+      const user = await this.userService.findOne({
         id: userId
       });
-      return {
-        data
-      };
+      return user;
     }
   }
   /**

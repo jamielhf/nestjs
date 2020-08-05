@@ -65,7 +65,8 @@ export class AuthService {
     res.cookie('token', token, { domain: '.huya.com', path: '/', signed: true, maxAge: 24 * 3600 * 1000, httpOnly: true });
 
     return {
-      data: token,
+      token,
+      userInfo: user
     }
   }
   /**

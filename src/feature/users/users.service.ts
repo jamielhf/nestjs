@@ -15,10 +15,9 @@ export class UsersService extends BaseService {
   }
   public repository: Repository<Users> = this.usersRepository;
   create(data) {
-    let user = new Users();
-    user = {
+    let user = new Users({
       ...data,
-    }
+    });
     return this.repository.save(user)
   }
   /**

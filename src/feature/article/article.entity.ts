@@ -79,15 +79,16 @@ export class Article {
     type: 'datetime',
     comment: '创建时间',
   })
-  create_time: Date
+  createTime: Date
 
   @Exclude()
   @UpdateDateColumn({
     type: 'datetime',
     comment: '更新时间',
   })
-  update_time: Date
-  constructor(partial: Partial<Article>) {
+  updateTime: Date
+
+  constructor(partial: Partial<Category>) {
     Object.assign(this, partial);
   }
 }

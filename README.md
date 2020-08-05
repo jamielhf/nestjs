@@ -200,6 +200,10 @@ CREATE TABLE `com_wechat_user_follow` (
 
 ```
 
+## 其他问题
+
+1 数据库拿到的数据解构赋值后返回前端会影响到 entity定义的Exclude  
+
 ## License
 
   Nest is [MIT licensed](LICENSE).

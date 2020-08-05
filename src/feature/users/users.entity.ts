@@ -56,4 +56,8 @@ export class Users {
     name: 'update_time'
   })
   updateTime: Date
+
+  constructor(partial: Partial<Users>) {
+    Object.assign(this, partial);
+  }
 }
