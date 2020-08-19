@@ -2,7 +2,7 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import {  GithubStrategy } from './github.strategy';
+import { GithubStrategy } from './github.strategy';
 import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -22,7 +22,7 @@ import { CoreModule } from '../../core/core.module';
       signOptions: { expiresIn: '12h' },
     }),
   ],
-  controllers:[AuthController],
+  controllers: [AuthController],
   providers: [
     AuthService,
     JwtStrategy,
@@ -30,4 +30,4 @@ import { CoreModule } from '../../core/core.module';
   ],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

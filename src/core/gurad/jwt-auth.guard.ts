@@ -9,8 +9,8 @@ import { RedisService } from '../redis/redis.service';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
-    private readonly redisService:RedisService
-  ){
+    private readonly redisService: RedisService
+  ) {
     super()
   }
   // https://github.com/nestjs/passport/blob/master/lib/auth.guard.ts
@@ -18,11 +18,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   getRequest(context: ExecutionContext) {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest();
-    this.token = request.headers.authorization.replace('Bearer ','');
+    this.token = request.headers.authorization.replace('Bearer ', '');
     return request;
   }
 
-   handleRequest(err: any, user: any, info: any) {
+  handleRequest(err: any, user: any, info: any) {
     if (err || !user) {
       throw new UnauthorizedException('身份验证失败');
     } else {
@@ -39,9 +39,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       } catch (e) {
         console.log(e);
       }
-     
+
       return user;
     }
-    
+
   }
 }

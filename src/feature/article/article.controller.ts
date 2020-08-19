@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Req, UseGuards, Query, Delete, Param, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Req, UseGuards, Query, Delete, Param, Put } from '@nestjs/common';
 import { createBody } from './interface';
 import { AuthGuard } from '@nestjs/passport';
 import { ArticleService } from './article.service';
 import { updateBody } from './dto/article.dto';
+import { Response, Request } from 'express';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/article')
@@ -37,7 +38,7 @@ export class ArticleController {
   }
   // 获取文章详情
   @Get()
-  async getAllArticle() {
+  async getAllArticle(@Res() res: Response) {
     return await this.articleServive.find({
       where: {
         status: 'publish'

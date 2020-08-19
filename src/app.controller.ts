@@ -4,7 +4,6 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller()
 export class AppController {
-  @UseGuards(AuthGuard('jwt'))
   @Get('/')
   @Render('index')
   root() {

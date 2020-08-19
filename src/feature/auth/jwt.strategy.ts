@@ -6,9 +6,6 @@ import { UsersService } from '../users/users.service';
 import { md5 } from 'utility';
 import { RedisService } from '../../core/redis/redis.service';
 import { Users } from '../users/users.entity';
-
-
-
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -20,6 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
     });
+    console.log('payload2', 2)
   }
   async validate(payload: any) {
     console.log('payload', payload)
