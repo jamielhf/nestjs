@@ -62,7 +62,9 @@ export class CategoryService extends BaseService {
         return ''
       }
     } else {
-      res = await this.repository.find();
+      res = await this.repository.find({
+        where: {}, relations: ["tags"]
+      });
     }
     return res
   }
