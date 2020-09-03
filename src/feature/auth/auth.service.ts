@@ -62,7 +62,7 @@ export class AuthService {
       errorLogger.log(e)
     }
     // 写token 到 cookie 方便ssr
-    res.cookie('token', token, { domain: '.huya.com', path: '/', signed: true, maxAge: 24 * 3600 * 1000, httpOnly: true });
+    res.cookie('token', token, { domain: 'lhf.com', path: '/', signed: true, maxAge: 24 * 3600 * 1000, httpOnly: true });
 
     return {
       token,
@@ -107,7 +107,7 @@ export class AuthService {
       ...data,
       nickName: data.username,
       password: md5(data.password),
-      avatar: 'https://huyaimg.msstatic.com/avatar/1076/7e/e1d48955f39a25fb944f4dedb3ed16_180_135.jpg',
+      avatar: '',
       type: 'user',
     }
     try {
@@ -264,7 +264,7 @@ export class AuthService {
     }
     const token = encryptMD5(user.email + user.password + SECRET);
     // 发送验证邮件
-    let sendState = await this.mailer.sendActiveMail('linhaifeng3@huya.com', token, user.username);
+    let sendState = await this.mailer.sendActiveMail('569309786@qq.com', token, user.username);
     logger.info('验证邮件token', JSON.stringify(`${token},${user.email},${user.username}`))
     if (sendState === 'success') {
       return true
