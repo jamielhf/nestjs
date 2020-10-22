@@ -264,7 +264,7 @@ export class AuthService {
     }
     const token = encryptMD5(user.email + user.password + SECRET);
     // 发送验证邮件
-    let sendState = await this.mailer.sendActiveMail('569309786@qq.com', token, user.username);
+    let sendState = await this.mailer.sendActiveMail(user.email, token, user.username);
     logger.info('验证邮件token', JSON.stringify(`${token},${user.email},${user.username}`))
     if (sendState === 'success') {
       return true

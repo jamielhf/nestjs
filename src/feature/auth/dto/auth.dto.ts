@@ -1,5 +1,5 @@
-import { IsString, IsInt,Matches, IsEmail,IsNotEmpty,NotEquals } from 'class-validator';
-import {Transform} from 'class-transformer';
+import { IsString, IsInt, Matches, IsEmail, IsNotEmpty, NotEquals } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { IsEqualsThan } from '../../../core/decorators/validator.decorators';
 export class LoginDto {
   @IsNotEmpty({
@@ -28,13 +28,6 @@ export class ResgisterDto {
   })
   readonly password: string;
   @IsNotEmpty({
-    message: '确认密码不能为空',
-  })
-  @IsEqualsThan('password', {
-    message: '两次密码输入不一致。',
-  })
-  readonly rePwd: string;
-  @IsNotEmpty({
     message: '邮箱不能为空',
   })
   @IsEmail({}, {
@@ -47,13 +40,6 @@ export class SetPasswordDto {
     message: '密码不能为空',
   })
   readonly password: string;
-  @IsNotEmpty({
-    message: '确认密码不能为空',
-  })
-  @IsEqualsThan('password', {
-    message: '两次密码输入不一致。',
-  })
-  readonly rePwd: string;
   @IsNotEmpty({
     message: 'token不能为空',
   })
@@ -78,13 +64,6 @@ export class ResetPwdDto {
     message: '密码不能为空',
   })
   readonly password: string;
-  @IsNotEmpty({
-    message: '确认密码不能为空',
-  })
-  @IsEqualsThan('password', {
-    message: '两次密码输入不一致。',
-  })
-  readonly rePwd: string;
 }
 
 export class ActiveRegisterDto {
