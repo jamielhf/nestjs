@@ -1,15 +1,35 @@
-
-import { Controller, Get, Render, Param, Req, Post, Res, UseGuards, Query, Body, BadRequestException, Next, Logger, UseInterceptors, Redirect } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Render,
+  Param,
+  Req,
+  Post,
+  Res,
+  UseGuards,
+  Query,
+  Body,
+  BadRequestException,
+  Next,
+  Logger,
+  UseInterceptors,
+  Redirect,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, ResgisterDto, ActiveRegisterDto, ResetPwdDto, ForgetPasswordDto, SetPasswordDto } from './dto/auth.dto';
+import {
+  LoginDto,
+  ResgisterDto,
+  ActiveRegisterDto,
+  ResetPwdDto,
+  ForgetPasswordDto,
+  SetPasswordDto,
+} from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Response, Request } from 'express';
 
-
 @Controller('api/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService,
-  ) { }
+  constructor(private readonly authService: AuthService) {}
   /**
    *
    * 登陆
@@ -19,8 +39,11 @@ export class AuthController {
    * @memberof AuthController
    */
   @Post('login')
-  async login(@Body() body: LoginDto, @Res() res: Response, @Req() req: Request) {
-
+  async login(
+    @Body() body: LoginDto,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
     let result = await this.authService.login(body, res);
     return result;
   }
@@ -35,7 +58,7 @@ export class AuthController {
    */
   @UseGuards(AuthGuard('jwt'))
   @Get('logout')
-  async logout(@Res() res, @Req() req) {
+  async logout(@Req() req) {
     let result = await this.authService.logout(req);
     return result;
   }
@@ -84,7 +107,7 @@ export class AuthController {
   }
 
   /**
-   * 
+   *
    * 注册验证邮箱
    * @param {ActiveRegisterDto} body
    * @returns
@@ -102,6 +125,6 @@ export class AuthController {
   @Get('github')
   @UseGuards(AuthGuard('github'))
   async github() {
-    return null
+    return null;
   }
 }

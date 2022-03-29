@@ -1,5 +1,13 @@
-import { IsString,IsIn, IsInt,Matches, IsEmail,IsNotEmpty,NotEquals } from 'class-validator';
-import {Transform} from 'class-transformer';
+import {
+  IsString,
+  IsIn,
+  IsInt,
+  Matches,
+  IsEmail,
+  IsNotEmpty,
+  NotEquals,
+} from 'class-validator';
+import { Transform } from 'class-transformer';
 export class UserInfoDto {
   @IsNotEmpty({
     message: '用户id不能为空',
@@ -11,11 +19,7 @@ export class UpdateUserInfoDto {
   @IsNotEmpty({
     message: '更新内容不能为空',
   })
-  @IsIn([
-    'nickName',
-    'decs',
-    'avatar',
-  ],{
+  @IsIn(['nickName', 'decs', 'avatar'], {
     message: '更新信息有误',
   })
   readonly field: string;
@@ -23,4 +27,14 @@ export class UpdateUserInfoDto {
     message: '值不能为空',
   })
   readonly value: string;
+}
+export class FollerDto {
+  @IsNotEmpty({
+    message: '关注的用户id不能为空',
+  })
+  readonly followUserId: string;
+  @IsNotEmpty({
+    message: '关注的状态不能为空',
+  })
+  readonly status: string;
 }

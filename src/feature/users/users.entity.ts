@@ -1,5 +1,11 @@
-
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Article } from '../article/article.entity';
 
@@ -14,48 +20,48 @@ export class Users {
   @Column({ length: 100, default: '', name: 'nick_name' })
   nickName: string;
 
-  @Column({ length: 200, default: '', comment: '个人介绍', })
+  @Column({ length: 200, default: '', comment: '个人介绍' })
   decs: string;
 
   @Column({
     type: 'text',
   })
-  avatar: string
+  avatar: string;
 
   @Column('simple-enum', { enum: ['admin', 'visitor'], default: 'visitor' })
   role: string; // 用户角色
 
   @Exclude()
   @Column({ length: 50 })
-  password: string
+  password: string;
 
   @Column({ length: 50 })
-  email: string
+  email: string;
 
   @Column('simple-enum', { enum: [1, 0], default: 0 })
-  active: number
+  active: number;
 
   @Column({ length: 50, default: '', name: 'github_id' })
-  githubId: string
+  githubId: string;
 
   @Column({ length: 50, default: '', name: 'github_accesstoken' })
-  githubAccesstoken: string
+  githubAccesstoken: string;
 
   @Exclude()
   @CreateDateColumn({
     type: 'datetime',
     comment: '创建时间',
-    name: 'create_time'
+    name: 'create_time',
   })
-  createTime: Date
+  createTime: Date;
 
   @Exclude()
   @UpdateDateColumn({
     type: 'datetime',
     comment: '更新时间',
-    name: 'update_time'
+    name: 'update_time',
   })
-  updateTime: Date
+  updateTime: Date;
 
   constructor(partial: Partial<Users>) {
     Object.assign(this, partial);

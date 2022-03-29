@@ -56,16 +56,15 @@ export class ArticleService extends BaseService {
     try {
       const list = await this.repository
         .createQueryBuilder('article')
-        .where("article.status = :status", { status: 'publish' })
+        .where('article.status = :status', { status: 'publish' })
         .andWhere(`article.${type} = :${type}`, { [type]: id })
-        .orderBy("article.publishAt", "DESC")
+        .orderBy('article.publishAt', 'DESC')
         .getMany();
-      return list
+      return list;
     } catch (e) {
       errorLogger.error(e);
       throw new ApiException('系统超时', ApiErrorCode.TIMEOUT);
     }
-
   }
   /**
    *
@@ -84,7 +83,7 @@ export class ArticleService extends BaseService {
       });
       const res = await this.repository.save(newArticle);
       if (res) {
-        return res
+        return res;
       } else {
         throw new ApiException('更新失败', ApiErrorCode.TIMEOUT);
       }
@@ -92,8 +91,6 @@ export class ArticleService extends BaseService {
       errorLogger.error(e);
       throw new ApiException('系统超时', ApiErrorCode.TIMEOUT);
     }
-
-
   }
 
   /**
@@ -105,11 +102,15 @@ export class ArticleService extends BaseService {
    * @returns {Promise<{ msg: string }>}
    * @memberof ArticleService
    */
-  async updateArticle(id: string, data: updateBody, userId: string): Promise<{ msg: string }> {
+  async updateArticle(
+    id: string,
+    data: updateBody,
+    userId: string,
+  ): Promise<{ msg: string }> {
     let article = await this.repository.findOne({
       where: {
         id,
-      }
+      },
     });
     if (article) {
       if (article.userId === userId) {
@@ -122,7 +123,9 @@ export class ArticleService extends BaseService {
           article.tag = hasTag;
         }
         if (categoryId) {
-          const hasCategory = await this.categoryService.findOne<Category>({ id: categoryId });
+          const hasCategory = await this.categoryService.findOne<Category>({
+            id: categoryId,
+          });
           if (!hasCategory) {
             throw new ApiException('分类不存在', ApiErrorCode.DATA_NO_EXIT);
           }
@@ -130,29 +133,26 @@ export class ArticleService extends BaseService {
         }
         article = {
           ...article,
-          ...updateData
-        }
+          ...updateData,
+        };
         try {
           const query = await this.repository
             .createQueryBuilder('article')
             .leftJoinAndSelect('article.category', 'category')
             .leftJoinAndSelect('article.tag', 'tag')
             .update('article')
-            .where("article.id = :id", { id })
+            .where('article.id = :id', { id })
             .set({ ...article })
             .execute();
-          console.log(query, article)
           if (query.raw.affectedRows === 1) {
-            return { msg: '更新成功' }
+            return { msg: '更新成功' };
           } else {
-            return { msg: '更新失败' }
+            return { msg: '更新失败' };
           }
-
         } catch (e) {
           errorLogger.error(e);
           throw new ApiException('系统超时', ApiErrorCode.TIMEOUT);
         }
-
       } else {
         throw new ApiException('没有权限', ApiErrorCode.NO_AUTHORIZATION);
       }
@@ -170,10 +170,10 @@ export class ArticleService extends BaseService {
   async userArticle(userId: string): Promise<Article[]> {
     const article = await this.repository
       .createQueryBuilder('article')
-      .where("article.userId = :userId", { userId })
-      .orderBy("article.publishAt", "DESC")
-      .getMany()
-    return article
+      .where('article.userId = :userId', { userId })
+      .orderBy('article.publishAt', 'DESC')
+      .getMany();
+    return article;
   }
   /**
    *
@@ -186,13 +186,13 @@ export class ArticleService extends BaseService {
   async getArtile(aid: string, userId: string) {
     const article: Article = await this.repository.findOne({
       where: {
-        id: aid
-      }
-    })
+        id: aid,
+      },
+    });
     if (!article || (article.status === 'draft' && article.userId !== userId)) {
       throw new ApiException('文章不存在', ApiErrorCode.DATA_NO_EXIT);
     } else {
-      return article
+      return article;
     }
   }
   /**
@@ -205,9 +205,9 @@ export class ArticleService extends BaseService {
   async deleteArticle(aid: string, userId: string) {
     const article: Article = await this.repository.findOne({
       where: {
-        id: aid
-      }
-    })
+        id: aid,
+      },
+    });
     if (!article) {
       throw new ApiException('文章不存在', ApiErrorCode.DATA_NO_EXIT);
     } else if (article.userId !== userId) {
@@ -216,14 +216,13 @@ export class ArticleService extends BaseService {
       const res = await this.repository.delete({ id: aid });
       if (res.affected === 1) {
         return {
-          msg: '删除成功'
-        }
+          msg: '删除成功',
+        };
       } else {
         return {
-          msg: '删除失败'
-        }
+          msg: '删除失败',
+        };
       }
-
     }
   }
 }

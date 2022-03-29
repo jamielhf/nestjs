@@ -1,5 +1,3 @@
-
-
 # Installation
 
 ```bash
@@ -7,6 +5,11 @@ $ npm install
 ```
 
 ## Running the app
+
+```bash
+# 启动本地reids
+redis-server
+```
 
 ```bash
 # development
@@ -40,7 +43,7 @@ nestjs+mysql
 
 - 登陆注册
   - 登陆 ✅
-  - github登陆 ✅
+  - github 登陆 ✅
   - 登出 ✅
   - 注册 ✅
   - 找回密码 ✅
@@ -49,8 +52,8 @@ nestjs+mysql
 - 个人信息
   - 获取 ✅
   - 修改 ✅
-  - 关注 ❌
-  - 取消关注 ❌
+  - 关注 ✅
+  - 取消关注 ✅
   - 获取关注的人 ❌
   - 获取被关注的人 ❌
   - 获取个人关注的标签 ❌
@@ -64,15 +67,15 @@ nestjs+mysql
   - 获取分类文章列表 ✅
   - 获取用户文章列表 ✅
   - 赞 ❌
-  - 搜索 ❌
   - 取消赞 ❌
+  - 搜索 ❌
   - 评论 ❌
   - 删除 ❌
 - 标签
   - 获取所有标签 ✅
   - 新增标签 ✅
   - 删除标签 ✅
-  - 更新标签 ❌
+  - 更新标签 ✅
 - 分类
   - 获取所有分类 ✅
   - 新增分类 ✅
@@ -84,7 +87,6 @@ nestjs+mysql
 - 基础
   - 日志模块 ✅
   - 发送邮件 ✅
-
 
 ### 文章结构
 
@@ -128,22 +130,21 @@ subscribersCount: 419912
 isSubscribe: true
 ```
 
-
-
 ### 关注粉丝用户表设计
 
 CREATE TABLE `com_wechat_user_follow` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `uid` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户ID',
-  `fid` bigint(20) NOT NULL DEFAULT '0' COMMENT '关注用户ID',
-  `status` bigint(20) NOT NULL DEFAULT '0' COMMENT '关注状态:是否取消关注等',
-  `createtime` int(10) DEFAULT '0' COMMENT '关注时间',
-  PRIMARY KEY (`id`)
+`id` bigint(20) NOT NULL AUTO_INCREMENT,
+`uid` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户 ID',
+`fid` bigint(20) NOT NULL DEFAULT '0' COMMENT '关注用户 ID',
+`status` bigint(20) NOT NULL DEFAULT '0' COMMENT '关注状态:是否取消关注等',
+`createtime` int(10) DEFAULT '0' COMMENT '关注时间',
+PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户关注表';
 
 ### 文章
 
 #### 文章缩略
+
 ```js
 {
   commentsCount: 7
@@ -158,6 +159,7 @@ CREATE TABLE `com_wechat_user_follow` (
 }
 
 ```
+
 #### 文章内容详情
 
 ```js
@@ -179,31 +181,33 @@ CREATE TABLE `com_wechat_user_follow` (
 ```
 
 ### 评论
+
 ```js
 {
-  id: "5e63ad0cf265da7550d25c9d"
-  content: "还是我豪哥👍"
-  userId: "5da9915a51882562dc416c19"
-  respUser: "5dbe78766fb9a02075109419"
-  respComment: ""
-  userInfo: {}
-  respUserInfo: {}
-  likesCount: 0
-  picList: []
-  createdAt: "2020-03-07T14:17:48.594Z"
-  updatedAt: "2020-03-07T14:17:48.594Z"
-  subCount: 0
-  replyCount: 0
-  topComment: []
-  isLiked: false
+  id: '5e63ad0cf265da7550d25c9d';
+  content: '还是';
+  userId: '5da9915a51882562dc416c19';
+  respUser: '5dbe78766fb9a02075109419';
+  respComment: '';
+  userInfo: {
+  }
+  respUserInfo: {
+  }
+  likesCount: 0;
+  picList: [];
+  createdAt: '2020-03-07T14:17:48.594Z';
+  updatedAt: '2020-03-07T14:17:48.594Z';
+  subCount: 0;
+  replyCount: 0;
+  topComment: [];
+  isLiked: false;
 }
-
 ```
 
 ## 其他问题
 
-1 数据库拿到的数据解构赋值后返回前端会影响到 entity定义的Exclude  
+1 数据库拿到的数据解构赋值后返回前端会影响到 entity 定义的 Exclude
 
 ## License
 
-  Nest is [MIT licensed](LICENSE).
+Nest is [MIT licensed](LICENSE).
