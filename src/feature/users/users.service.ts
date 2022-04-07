@@ -7,6 +7,8 @@ import { BaseService } from '../../common/mysql/base.service';
 import { logger } from '../../common/logger';
 import { ApiException } from '../../core/exceptions/api.exception';
 import { ApiErrorCode } from '../../core/enums/api-error-code.enum';
+import { Tag } from '../tag/tag.entity';
+import { apiMsg } from '../../common/util';
 
 @Injectable()
 export class UsersService extends BaseService {
@@ -15,6 +17,8 @@ export class UsersService extends BaseService {
     private readonly usersRepository: Repository<Users>,
     @InjectRepository(Relations)
     private readonly relationsRepository: Repository<Relations>,
+    @InjectRepository(Tag)
+    private readonly tagRepository: Repository<Tag>,
   ) {
     super();
   }
@@ -74,7 +78,6 @@ export class UsersService extends BaseService {
             followUserId,
           },
         });
-        console.log('res', res);
         if (res) {
           const updateRes = await this.relationsRepository.update(res.id, {
             status,
@@ -106,5 +109,40 @@ export class UsersService extends BaseService {
       logger.error(e);
       throw new ApiException('更新失败', ApiErrorCode.TIMEOUT);
     }
+  }
+  /**
+   *
+   * @param {id,status}
+   * @param userId
+   */
+  async followTag({ id, status }, userId) {
+    const tag = await this.tagRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!tag) {
+      apiMsg('标签不存在', ApiErrorCode.DATA_NO_EXIT);
+    }
+    const user = await this.repository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: ['tag'],
+    });
+    if (+status === 0) {
+      user.tag = user.tag.filter(item => item.id !== id);
+    } else {
+      if (!user.tag.find(item => item.id === id)) {
+        user.tag.push(tag);
+      }
+    }
+    const res = await this.repository.save(user);
+    if (res) {
+      return {
+        msg: '成功',
+      };
+    }
+    apiMsg('更新失败', ApiErrorCode.TIMEOUT);
   }
 }

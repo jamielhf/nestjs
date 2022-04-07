@@ -36,5 +36,16 @@ export class FollerDto {
   @IsNotEmpty({
     message: '关注的状态不能为空',
   })
+  readonly status: 0 | 1;
+}
+
+export class TagIdDto {
+  @IsNotEmpty({
+    message: '标签id不能为空',
+  })
+  readonly id: string;
+  @IsNotEmpty({
+    message: '关注的状态不能为空',
+  })
   readonly status: string;
 }

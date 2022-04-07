@@ -6,10 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from './users.entity';
 import { Relations } from './relations.entity';
 import { CommonModule } from '../../common/common.module';
+import { Tag } from '../tag/tag.entity';
 @Module({
   imports: [
     CommonModule,
-    TypeOrmModule.forFeature([Users, Relations]),
+    TypeOrmModule.forFeature([Users, Relations, Tag]),
     PassportModule, // 默认策略，之后在装饰器中使用就不需要传递
   ],
   controllers: [UserController],

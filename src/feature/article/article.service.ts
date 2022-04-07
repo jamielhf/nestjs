@@ -36,7 +36,15 @@ export class ArticleService extends BaseService {
    * @returns {Promise<Article[]>}
    * @memberof ArticleService
    */
-  async list(type: IType, id: string): Promise<Article[]> {
+  async list(
+    type: IType,
+    id: string,
+    page = 1,
+    pageSize = 20,
+  ): Promise<Article[]> {
+    if (page < 1 || pageSize < 1) {
+      throw new ApiException('页数错误', ApiErrorCode.PARAM_ERROR);
+    }
     if (type === 'categoryId') {
       const hasCategory = await this.categoryService.findOne<Category>({ id });
       if (!hasCategory) {
@@ -49,6 +57,7 @@ export class ArticleService extends BaseService {
       }
     } else if (type === 'userId') {
       const hasUser = await this.usersService.findOne<Users>({ id });
+      console.log('hasUser', hasUser);
       if (!hasUser) {
         throw new ApiException('用户不存在', ApiErrorCode.DATA_NO_EXIT);
       }
@@ -59,6 +68,8 @@ export class ArticleService extends BaseService {
         .where('article.status = :status', { status: 'publish' })
         .andWhere(`article.${type} = :${type}`, { [type]: id })
         .orderBy('article.publishAt', 'DESC')
+        .skip((page - 1) * pageSize)
+        .take(pageSize)
         .getMany();
       return list;
     } catch (e) {
@@ -73,12 +84,12 @@ export class ArticleService extends BaseService {
    * @returns
    * @memberof ArticleService
    */
-  async create(data: Partial<Article>): Promise<Article> {
-    if (!data.content && !data.title) {
-      throw new ApiException('创建失败', ApiErrorCode.TIMEOUT);
-    }
+  async create(id, data: Partial<Article>): Promise<Article> {
+    console.log(data);
     try {
       const newArticle = await this.repository.create({
+        userId: id,
+        status: 'draft',
         ...data,
       });
       const res = await this.repository.save(newArticle);
@@ -167,11 +178,17 @@ export class ArticleService extends BaseService {
    * @returns {Promise<Article[]>}
    * @memberof ArticleService
    */
-  async userArticle(userId: string): Promise<Article[]> {
+  async userArticle(
+    userId: string,
+    page = 1,
+    pageSize = 20,
+  ): Promise<Article[]> {
     const article = await this.repository
       .createQueryBuilder('article')
       .where('article.userId = :userId', { userId })
       .orderBy('article.publishAt', 'DESC')
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
       .getMany();
     return article;
   }
@@ -224,5 +241,20 @@ export class ArticleService extends BaseService {
         };
       }
     }
+  }
+
+  async getAllArticle(page, pageSize = 20) {
+    if (page < 1 || pageSize < 1) {
+      throw new ApiException('页数错误', ApiErrorCode.PARAM_ERROR);
+    }
+    const res = await this.repository.find({
+      where: {
+        status: 'publish',
+      },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+    console.log(res);
+    return res;
   }
 }

@@ -38,11 +38,19 @@ export class CategoryController {
     @Body() body: Partial<CategoryUpdateDto>,
   ) {
     let { ...data } = body;
+    const update: any = {};
+    if (data.title) {
+      update.title = data.title;
+    }
+    if (data.icon) {
+      update.icon = data.icon;
+    }
+
     return await this.categoryService.update(
       {
         id,
       },
-      data,
+      update,
     );
   }
   // 删除分类

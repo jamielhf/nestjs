@@ -167,9 +167,7 @@ export class AuthService {
         password: encryptMD5(data.password),
       },
     );
-    return {
-      msg: user.raw.affectedRows === 1 ? '更新成功' : '更新失败',
-    };
+    return user;
   }
   /**
    * 设置密码

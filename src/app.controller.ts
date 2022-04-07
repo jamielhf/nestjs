@@ -13,7 +13,6 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller()
 export class AppController {
   @Get()
-  @Render('index')
   root() {
     return { message: 'Hello world!' };
   }

@@ -23,10 +23,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
   async validate(payload: any) {
-    console.log('payload', payload);
+    // console.log('payload', payload);
     const { username } = payload;
     const user = await this.usersService.findOne<Users>({ username });
-    console.log('payload', user);
+    // console.log('payload', user);
     if (user) {
       // token是否在redis中 没有则不在登陆状态
       const token = await this.redisService.get(user.id);

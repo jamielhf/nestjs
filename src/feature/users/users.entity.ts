@@ -5,9 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Article } from '../article/article.entity';
+import { Tag } from '../tag/tag.entity';
 
 @Entity()
 export class Users {
@@ -46,6 +49,10 @@ export class Users {
 
   @Column({ length: 50, default: '', name: 'github_accesstoken' })
   githubAccesstoken: string;
+
+  @ManyToMany(() => Tag, tag => tag.user, { cascade: true })
+  @JoinTable()
+  tag: Tag[];
 
   @Exclude()
   @CreateDateColumn({

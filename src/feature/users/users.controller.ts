@@ -15,7 +15,12 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
-import { UserInfoDto, FollerDto, UpdateUserInfoDto } from './dto/users.dto';
+import {
+  UserInfoDto,
+  FollerDto,
+  UpdateUserInfoDto,
+  TagIdDto,
+} from './dto/users.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/user')
@@ -34,7 +39,10 @@ export class UserController {
     let userId = body.userId || req.user.id;
     if (userId) {
       const user = await this.userService.findOne({
-        id: userId,
+        where: {
+          id: userId,
+        },
+        relations: ['tag'],
       });
       return user;
     }
@@ -66,5 +74,11 @@ export class UserController {
   @Post('updateUserInfo')
   async updateUserInfo(@Body() body: UpdateUserInfoDto, @Req() req) {
     return await this.userService.updateUserInfo(body, req.user.id);
+  }
+  // 关注tag
+  @Post('followTag')
+  async followTag(@Body() body: TagIdDto, @Req() req) {
+    console.log('body', body);
+    return await this.userService.followTag(body, req.user.id);
   }
 }

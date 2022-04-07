@@ -9,8 +9,6 @@ import { ICategory } from './interfaces/index';
 import { CategorySaveDto } from './dto/category.dto';
 import { logger, errorLogger } from 'src/common/logger';
 
-
-
 @Injectable()
 export class CategoryService extends BaseService {
   constructor(
@@ -18,7 +16,6 @@ export class CategoryService extends BaseService {
     private readonly categoryRepository: Repository<Category>,
   ) {
     super();
-
   }
   public repository: Repository<Category> = this.categoryRepository;
   /**
@@ -29,13 +26,15 @@ export class CategoryService extends BaseService {
    * @memberof CategoryService
    */
   async save(data: Partial<Category>): Promise<Category> {
-    const hasCategory = await this.repository.findOne({ where: { title: data.title } });
+    const hasCategory = await this.repository.findOne({
+      where: { title: data.title },
+    });
 
     if (!hasCategory) {
       let category = new Category(data);
       const res = await this.repository.save(category);
       if (res) {
-        return res
+        return res;
       } else {
         throw new ApiException('更新失败', ApiErrorCode.TIMEOUT);
       }
@@ -55,17 +54,18 @@ export class CategoryService extends BaseService {
     if (id) {
       res = await this.repository.findOne({
         where: {
-          id
-        }, relations: ["tags"]
+          id,
+        },
+        relations: ['tags'],
       });
       if (!res) {
-        return ''
+        throw new ApiException('分类不存在', ApiErrorCode.DATA_NO_EXIT);
       }
     } else {
       res = await this.repository.find({
-        where: {}, relations: ["tags"]
+        relations: ['tags'],
       });
     }
-    return res
+    return res;
   }
 }

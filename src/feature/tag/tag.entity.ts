@@ -1,4 +1,3 @@
-
 import {
   Entity,
   Column,
@@ -8,11 +7,12 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
-  JoinTable
+  JoinTable,
 } from 'typeorm';
 import { Article } from '../article/article.entity';
 import { Category } from '../category/category.entity';
 import { Exclude } from 'class-transformer';
+import { Users } from '../users/users.entity';
 
 @Entity()
 export class Tag {
@@ -25,17 +25,13 @@ export class Tag {
   @Column()
   icon: string;
 
-  @OneToMany(
-    () => Article,
-    article => article.tag,
-  )
+  @OneToMany(() => Article, article => article.tag)
   articles: Array<Article>;
 
-  @ManyToOne(
-    () => Category,
-    category => category.tags,
-    { cascade: true }
-  )
+  @ManyToMany(() => Users, user => user.tag)
+  user: Users[];
+
+  @ManyToOne(() => Category, category => category.tags, { cascade: true })
   @JoinTable()
   category: Category;
 
@@ -43,17 +39,17 @@ export class Tag {
   @CreateDateColumn({
     type: 'datetime',
     comment: '创建时间',
-    name: 'create_time'
+    name: 'create_time',
   })
-  createTime: Date
+  createTime: Date;
 
   @Exclude()
   @UpdateDateColumn({
     type: 'datetime',
     comment: '更新时间',
-    name: 'update_time'
+    name: 'update_time',
   })
-  updateTime: Date
+  updateTime: Date;
 
   constructor(partial: Partial<Tag>) {
     Object.assign(this, partial);

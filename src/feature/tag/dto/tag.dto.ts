@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty } from 'class-validator';
 export class TagSaveDto {
   @IsNotEmpty({
     message: '标签名不能为空',
@@ -22,6 +22,7 @@ export class TagIdDto {
 }
 
 export class TagUpdateDto {
-  readonly icon?: string;
-  readonly title?: string;
+  icon?: string;
+  title?: string;
+  category?: string;
 }
