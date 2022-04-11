@@ -54,6 +54,9 @@ export class Users {
   @JoinTable()
   tag: Tag[];
 
+  @ManyToMany(() => Article, article => article.user)
+  articleFoller: Article[];
+
   @Exclude()
   @CreateDateColumn({
     type: 'datetime',

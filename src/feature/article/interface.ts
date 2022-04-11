@@ -9,4 +9,4 @@ export interface IListquery {
   userId?: string;
 }
 
-export type IType = 'tagId' | 'categoryId' | 'userId'
+export type IType = 'tagId' | 'categoryId' | 'userId' | 'follow' | 'self';

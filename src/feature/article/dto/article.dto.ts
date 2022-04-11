@@ -72,3 +72,13 @@ export class pageDto {
   readonly page: number;
   readonly pageSize?: number;
 }
+export class IdDto {
+  @IsNotEmpty({
+    message: '文章id不能为空',
+  })
+  readonly id: number;
+  @IsNotEmpty({
+    message: '关注状态不能为空',
+  })
+  readonly status: 0 | 1;
+}

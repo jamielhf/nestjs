@@ -1,4 +1,3 @@
-
 import {
   Entity,
   Column,
@@ -9,11 +8,11 @@ import {
   JoinTable,
   OneToOne,
   JoinColumn,
-  ManyToOne
+  ManyToOne,
 } from 'typeorm';
-import { Tag } from '../tag/tag.entity'
-import { Category } from '../category/category.entity'
-import { Users } from '../users/users.entity'
+import { Tag } from '../tag/tag.entity';
+import { Category } from '../category/category.entity';
+import { Users } from '../users/users.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity()
@@ -41,20 +40,20 @@ export class Article {
     length: 100,
     nullable: true,
   })
-  title: string
+  title: string;
 
-  @ManyToOne(
-    () => Tag,
-    tag => tag.articles,
-    { cascade: true }
-  )
+  @ManyToMany(() => Users, user => user.articleFoller, { cascade: true })
+  @JoinTable()
+  user: Users[];
+
+  @ManyToOne(() => Tag, tag => tag.articles, { cascade: true })
   @JoinTable()
   tag: Tag;
 
   @ManyToOne(
     () => Category,
     category => category.articles,
-    { cascade: true } // 自动保存关系着的对象
+    { cascade: true }, // 自动保存关系着的对象
   )
   @JoinTable()
   category: Category;
@@ -67,11 +66,14 @@ export class Article {
   @Column('simple-enum', { enum: ['draft', 'publish'] })
   status: string; // 文章状态
 
-
   @Column({ type: 'int', default: 0 })
   views: number; // 阅读量
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: true, })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
+  })
   publishAt: Date; // 发布日期
 
   @Exclude()
@@ -79,14 +81,14 @@ export class Article {
     type: 'datetime',
     comment: '创建时间',
   })
-  createTime: Date
+  createTime: Date;
 
   @Exclude()
   @UpdateDateColumn({
     type: 'datetime',
     comment: '更新时间',
   })
-  updateTime: Date
+  updateTime: Date;
 
   constructor(partial: Partial<Category>) {
     Object.assign(this, partial);
