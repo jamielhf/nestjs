@@ -64,6 +64,16 @@ export class UserController {
     );
     return res;
   }
+  @Get('follow')
+  async getFollowList(@Req() req) {
+    const res = await this.userService.getFollow(req.user.id, 'getFollow');
+    return res;
+  }
+  @Get('follower')
+  async getFollowerList(@Req() req) {
+    const res = await this.userService.getFollow(req.user.id, 'getFollower');
+    return res;
+  }
   /**
    *
    * 更新用户信息 更新单项

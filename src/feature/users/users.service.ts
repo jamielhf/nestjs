@@ -145,4 +145,40 @@ export class UsersService extends BaseService {
     }
     apiMsg('更新失败', ApiErrorCode.TIMEOUT);
   }
+
+  /**
+   *
+   * @param id
+   * @param type getFollower 获取粉丝 getFollow 获取关注的人
+   */
+  async getFollow(id, type: 'getFollower' | 'getFollow' = 'getFollow') {
+    let list = [];
+    const query = this.relationsRepository
+      .createQueryBuilder('relations')
+      .where('relations.status = :status', { status: 1 });
+    if (type === 'getFollower') {
+      list = await query
+        .andWhere('relations.followUserId = :followUserId', {
+          followUserId: id,
+        })
+        .leftJoinAndMapOne(
+          'relations.user',
+          Users,
+          'user',
+          'user.id = relations.uid',
+        )
+        .getMany();
+    } else {
+      list = await query
+        .andWhere('relations.uid = :uid', { uid: id })
+        .leftJoinAndMapOne(
+          'relations.user',
+          Users,
+          'user',
+          'user.id = relations.followUserId',
+        )
+        .getMany();
+    }
+    return list;
+  }
 }

@@ -31,6 +31,7 @@ export class Users {
   })
   avatar: string;
 
+  @Exclude()
   @Column('simple-enum', { enum: ['admin', 'visitor'], default: 'visitor' })
   role: string; // 用户角色
 
@@ -47,6 +48,7 @@ export class Users {
   @Column({ length: 50, default: '', name: 'github_id' })
   githubId: string;
 
+  @Exclude()
   @Column({ length: 50, default: '', name: 'github_accesstoken' })
   githubAccesstoken: string;
 
