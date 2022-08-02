@@ -284,16 +284,24 @@ export class ArticleService extends BaseService {
    * @param pageSize
    * @returns
    */
-  async getAllArticle(page, pageSize = 20) {
+  async getAllArticle(page, pageSize = 20, userId, keyword) {
     if (page < 1 || pageSize < 1) {
       throw new ApiException('页数错误', ApiErrorCode.PARAM_ERROR);
     }
-    const res = await this.repository
+    const query = this.repository
       .createQueryBuilder('article')
       .where('article.status = :status', { status: 'publish' })
       .leftJoinAndSelect('article.category', 'category')
+      .leftJoinAndSelect('article.user', 'user', 'user.id = :id', {
+        id: userId,
+      })
       .leftJoinAndSelect('article.tag', 'tag')
-      .orderBy('article.publishAt', 'DESC')
+      .orderBy('article.publishAt', 'DESC');
+    if (keyword) {
+      query.having('article.content = :keyword', { keyword });
+    }
+
+    const res = await query
       .skip((page - 1) * pageSize)
       .take(pageSize)
       .getMany();

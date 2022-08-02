@@ -14,7 +14,13 @@ import {
 import { createBody } from './interface';
 import { AuthGuard } from '@nestjs/passport';
 import { ArticleService } from './article.service';
-import { createBodyDto, IdDto, pageDto, updateBody } from './dto/article.dto';
+import {
+  createBodyDto,
+  IdDto,
+  pageDto,
+  searchDto,
+  updateBody,
+} from './dto/article.dto';
 import { Response, Request } from 'express';
 
 @UseGuards(AuthGuard('jwt'))
@@ -100,10 +106,20 @@ export class ArticleController {
   }
   // 获取所有文章
   @Get()
-  async getAllArticle(@Body() body: pageDto) {
+  async getAllArticle(@Body() body: pageDto, @Req() req) {
     return await this.articleServive.getAllArticle(
       body.page,
       body.pageSize || 20,
+      req.user.id,
+    );
+  }
+  // 获取所有文章
+  @Get('search')
+  async search(@Body() body: searchDto, @Req() req) {
+    return await this.articleServive.getAllArticle(
+      body.page,
+      body.pageSize || 20,
+      req.user.id,
     );
   }
   // 创建文章

@@ -72,6 +72,17 @@ export class pageDto {
   readonly page: number;
   readonly pageSize?: number;
 }
+export class searchDto {
+  @IsNotEmpty({
+    message: '页数不能为空',
+  })
+  readonly page: number;
+  readonly pageSize?: number;
+  @IsNotEmpty({
+    message: '搜索内容不能为空',
+  })
+  keyword: string;
+}
 export class IdDto {
   @IsNotEmpty({
     message: '文章id不能为空',
