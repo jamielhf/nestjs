@@ -33,8 +33,9 @@ async function bootstrap() {
   // 允许跨越
   app.enableCors(corsOptionsDelegate);
   // 全局异常捕获
-  app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
+  // 日志
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));

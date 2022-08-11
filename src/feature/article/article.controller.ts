@@ -23,7 +23,6 @@ import {
 } from './dto/article.dto';
 import { Response, Request } from 'express';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('api/article')
 export class ArticleController {
   constructor(readonly articleServive: ArticleService) {}
@@ -39,10 +38,11 @@ export class ArticleController {
       id,
       body.page,
       body.pageSize || 20,
-      req.user.id,
+      (req.user && req.user.id) || '',
     );
   }
   // 获取关注文章列表
+  @UseGuards(AuthGuard('jwt'))
   @Get('follow')
   async userFollow(@Body() body: pageDto, @Req() req) {
     return await this.articleServive.list(
@@ -84,6 +84,7 @@ export class ArticleController {
     );
   }
   // 获取自己的文章列表
+  @UseGuards(AuthGuard('jwt'))
   @Get('user')
   async getArticleListByUserSelf(@Req() req, @Body() body: pageDto) {
     return await this.articleServive.list(
@@ -94,51 +95,62 @@ export class ArticleController {
       req.user.id,
     );
   }
-  // 获取某篇文章
-  @Get(':id')
-  async getArticle(@Param('id') id, @Req() req) {
-    return await this.articleServive.getArtile(id, req.user.id);
-  }
+
   // 获取自己的某篇文章
+  @UseGuards(AuthGuard('jwt'))
   @Get('self/:id')
   async getArticleDetail(@Param('id') id, @Req() req) {
     return await this.articleServive.getArtile(id, req.user.id, 'self');
   }
+  // 搜索文章
+  @Get('search')
+  async search(@Body() body: searchDto, @Req() req) {
+    return await this.articleServive.getAllArticle({
+      page: body.page || 1,
+      pageSize: body.pageSize || 20,
+      keyword: body.keyword || '',
+      userId: (req.user && req.user.id) || '',
+    });
+  }
+  // 获取某篇文章
+  @Get('detail/:id')
+  async getArticle(@Param('id') id, @Req() req) {
+    return await this.articleServive.getArtile(
+      id,
+      (req.user && req.user.id) || '',
+    );
+  }
   // 获取所有文章
   @Get()
   async getAllArticle(@Body() body: pageDto, @Req() req) {
-    return await this.articleServive.getAllArticle(
-      body.page,
-      body.pageSize || 20,
-      req.user.id,
-    );
+    return await this.articleServive.getAllArticle({
+      page: body.page,
+      pageSize: body.pageSize,
+      userId: (req.user && req.user.id) || '',
+    });
   }
-  // 获取所有文章
-  @Get('search')
-  async search(@Body() body: searchDto, @Req() req) {
-    return await this.articleServive.getAllArticle(
-      body.page,
-      body.pageSize || 20,
-      req.user.id,
-    );
-  }
+
   // 创建文章
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   async createArticle(@Body() body: createBodyDto, @Req() req) {
     console.log('body', body);
     return await this.articleServive.create(req.user.id, body);
   }
   // 更新文章
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   async updateArticle(@Param('id') id, @Body() body: updateBody, @Req() req) {
     return await this.articleServive.updateArticle(id, body, req.user.id);
   }
   // 删除文章
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   async deleteArticle(@Param('id') id, @Req() req) {
     return await this.articleServive.deleteArticle(id, req.user.id);
   }
   // 关注文章
+  @UseGuards(AuthGuard('jwt'))
   @Post('followArticle')
   async followArticle(@Body() body: IdDto, @Req() req) {
     return await this.articleServive.followArticle(body, req.user.id);

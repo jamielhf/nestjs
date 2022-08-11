@@ -20,7 +20,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const url = request.originalUrl;
     const statusCode = response.statusCode;
-
     // 错误码400 判断是否有管道的验证信息
     if (status === HttpStatus.BAD_REQUEST) {
       let msg = exception.message.error;

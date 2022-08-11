@@ -218,23 +218,29 @@ export class ArticleService extends BaseService {
    */
   async getArtile(
     aid: string,
-    userId: string,
+    userId?: string,
     type: 'other' | 'self' = 'other',
   ) {
+    console.log('article', 222);
     const query = this.repository
       .createQueryBuilder('article')
       .where('article.id = :aid', { aid })
       .leftJoinAndSelect('article.category', 'category')
-      .leftJoinAndSelect('article.tag', 'tag')
-      .leftJoinAndSelect('article.user', 'user', 'user.id = :id', {
+      .leftJoinAndSelect('article.tag', 'tag');
+    console.log('article', 1);
+    if (userId) {
+      query.leftJoinAndSelect('article.user', 'user', 'user.id = :id', {
         id: userId,
       });
+    }
+    console.log('article', 2);
 
     if (type === 'other') {
       query.andWhere('article.status = :status', { status: 'publish' });
     }
 
     const article: Article = await query.getOne();
+    console.log('article', article);
     if (!article || (type === 'self' && article.userId !== userId)) {
       throw new ApiException('文章不存在', ApiErrorCode.DATA_NO_EXIT);
     } else {
@@ -282,9 +288,11 @@ export class ArticleService extends BaseService {
    * 获取所有文章
    * @param page
    * @param pageSize
+   * @param userId
+   * @param keyword
    * @returns
    */
-  async getAllArticle(page, pageSize = 20, userId, keyword) {
+  async getAllArticle({ page = 1, pageSize = 20, userId = '', keyword = '' }) {
     if (page < 1 || pageSize < 1) {
       throw new ApiException('页数错误', ApiErrorCode.PARAM_ERROR);
     }
@@ -298,7 +306,7 @@ export class ArticleService extends BaseService {
       .leftJoinAndSelect('article.tag', 'tag')
       .orderBy('article.publishAt', 'DESC');
     if (keyword) {
-      query.having('article.content = :keyword', { keyword });
+      query.where('article.content LIKE :keyword', { keyword: `%${keyword}%` });
     }
 
     const res = await query
